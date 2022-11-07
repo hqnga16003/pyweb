@@ -2,9 +2,6 @@ from pyweb.models import User
 import hashlib
 
 
-
-
-
 def auth_user(username, password):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     return User.query.filter(User.username.__eq__(username.strip()),
