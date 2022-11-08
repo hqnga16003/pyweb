@@ -63,8 +63,11 @@ class BenhNhan(BaseModel):
     __tablename__ = 'benhnhan'
     ten = Column(String(50), nullable=False)
     gioitinh = Column(Enum(Sex), default=Sex.OTHER)
-    namsinh = Column(DateTime, nullable=False)
+    namsinh = Column(Integer, nullable=False)
     diachi = Column(Text)
+
+    def __str__(self):
+        return self.ten
 
 
 class DanhSachKham(BaseModel):
@@ -72,6 +75,31 @@ class DanhSachKham(BaseModel):
     tends = Column(String(50), nullable=False)
     ngaykham = Column(DateTime)
 
+    def __str__(self):
+        return self.tends
+
+
+class PhieuKham(BaseModel):
+    __tablename__ = 'phieukham'
+    id_benhnhan = Column(Integer, ForeignKey(BenhNhan.id), primary_key=True, nullable=False)
+    id_danhsachkham = Column(Integer, ForeignKey(DanhSachKham.id), primary_key=True, nullable=False)
+    trieuchung = Column(String(50))
+    dudoanbenh = Column(String(50))
+
+
+class HoaDon(BaseModel):
+    tienkham = Column(Float)
+    tongtien = Column(Float)
+
+
+class ChiTietPhieuKham(BaseModel):
+    __tablename__ = 'chitietphieukham'
+    id_phieukham = Column(Integer, ForeignKey(PhieuKham.id), primary_key=True, nullable=False)
+    id_thuoc = Column(Integer, ForeignKey(Thuoc.id), primary_key=True, nullable=False)
+    soluong = Column(Integer)
+    cachdung = Column(Text)
+    thanhTien = Column(Float)
+    id_hoadon = Column(Integer, ForeignKey(HoaDon.id), primary_key=True, nullable=False)
 
 
 class User(BaseModel, UserMixin):
@@ -89,30 +117,32 @@ class User(BaseModel, UserMixin):
 if __name__ == '__main__':
     with app.app_context():
         import hashlib
+    # db.create_all()
+    # p1 = PhieuKham(id_benhnhan=1, id_danhsachkham=1, trieuchung="Dau bung", dudoanbenh="dau bung")
+    # db.session.add_all([p1])
+    # db.session.commit()
 
-        # db.create_all()
+    # date_time_str = '13-07-2022'
+    # date_time_obj = datetime.strptime(date_time_str, "%d-%m-%Y")
+    # a1 = DanhSachKham(tends="ds3", ngaykham=date_time_obj)
+    # db.session.add_all([a1])
+    # db.session.commit()
 
-        # date_time_str = '13-07-2022'
-        # date_time_obj = datetime.strptime(date_time_str, "%d-%m-%Y")
-        # a1 = DanhSachKham(tends="ds3", ngaykham=date_time_obj)
-        # db.session.add_all([a1])
-        # db.session.commit()
+    # date_time_str = '11-07-2002'
+    # date_time_obj = datetime.strptime(date_time_str, "%d-%m-%Y")
+    # p1 = BenhNhan(ten='Hoang Quang Nga', gioitinh=Sex.MALE, namsinh=date_time_obj.year,
+    #               diachi="Gò vấp Thành Phố HCM")
+    # p2 = BenhNhan(ten='Luong Van Huy', gioitinh=Sex.MALE, namsinh=date_time_obj.year, diachi="Quận 9 Thành Phố HCM")
+    # p3 = BenhNhan(ten='xxxxxxxx', gioitinh=Sex.OTHER, namsinh=date_time_obj.year, diachi="Gò vấp Thành Phố HCM")
+    # db.session.add_all([p1, p2, p3])
+    # db.session.commit()
 
-        # date_time_str = '11-07-2002'
-        # date_time_obj = datetime.strptime(date_time_str, "%d-%m-%Y")
-        # p1 = BenhNhan(ten='Hoang Quang Nga', gioitinh=Sex.MALE, namsinh=date_time_obj,
-        #               diachi="Gò vấp Thành Phố HCM")
-        # p2 = BenhNhan(ten='Luong Van Huy', gioitinh=Sex.MALE, namsinh=date_time_obj, diachi="Quận 9 Thành Phố HCM")
-        # p3 = BenhNhan(ten='xxxxxxxx', gioitinh=Sex.OTHER, namsinh=date_time_obj, diachi="Gò vấp Thành Phố HCM")
-        # db.session.add_all([p1, p2, p3])
-        # db.session.commit()
-
-        # password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest())
-        # u = User(name='nga', username='admin2', password=password,
-        #          user_role=UserRole.ADMIN,
-        #          image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1646729569/fi9v6vdljyfmiltegh7k.jpg')
-        # db.session.add(u)
-        # db.session.commit()
+    # password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest())
+    # u = User(name='nga', username='admin2', password=password,
+    #          user_role=UserRole.ADMIN,
+    #          image='https://res.cloudinary.com/dxxwcby8l/image/upload/v1646729569/fi9v6vdljyfmiltegh7k.jpg')
+    # db.session.add(u)
+    # db.session.commit()
 
     #  m1 = Thuoc(ten='thuoc 1', gia=20000, mota='****',
     #                 anh='https://res.cloudinary.com/dxxwcby8l/image/upload/v1646729569/fi9v6vdljyfmiltegh7k.jpg',
