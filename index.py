@@ -21,6 +21,7 @@ def login_admin():
 
 @app.route()
 def huy():
+    a = 5
     pass
 
 @login.user_loader
