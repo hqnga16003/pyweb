@@ -1,4 +1,4 @@
-from pyweb.models import User, LoaiThuoc, Thuoc
+from pyweb.models import TaiKhoan, LoaiThuoc, Thuoc
 from pyweb import db, app
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
@@ -27,5 +27,5 @@ class StatsView(BaseView):
 
 admin.add_view(ModelView(LoaiThuoc, db.session, name=" Danh Sach Loai thuoc"))
 admin.add_view(ModelView(Thuoc, db.session, name="Danh Sach Thuoc"))
-admin.add_view(ModelView(User, db.session, name='danh sách user'))
+admin.add_view(ModelView(TaiKhoan, db.session, name='danh sách user'))
 admin.add_view(StatsView(name='Thông kê'))
