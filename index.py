@@ -19,6 +19,9 @@ def login_admin():
 
     return redirect('/admin')
 
+@app.route()
+def huy():
+    pass
 
 @login.user_loader
 def load_user(user_id):

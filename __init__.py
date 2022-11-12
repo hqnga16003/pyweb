@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from urllib.parse import quote
 from flask_login import LoginManager
 # thanh
+
 app = Flask(__name__)
 app.secret_key = '32342sdfsfsdfdsfsdf'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/flashweb?charset=utf8mb4' % quote('luonghuy2k2')
