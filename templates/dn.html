@@ -1,0 +1,12 @@
+{% extends "layout/base.html" %}
+{% block title %} đăng nhập user {% endblock %}
+{% block content %}
+    <div class="login">
+        <form method="post" action="#">
+        <h2>Member login</h2>
+        <input type="text" name="name" placeholder="nhập username" >
+        <input type="password" name="password" placeholder="nhập mật khẩu">
+        <button type="submit">Login</button>
+        </form>
+    </div>
+{% endblock %}
