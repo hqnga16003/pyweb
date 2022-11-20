@@ -1,51 +1,53 @@
 from flask import render_template, request, redirect
 from flask import session
 from pyweb import app, dao, admin, login
-from flask_login import login_user
+from flask_login import login_user,logout_user
+from pyweb.decorators import annonymous_user
 
 
 @app.route("/")
 def index():
     return render_template('index.html')
 
-
 @app.route("/dklk")
 def dklk():
-    return render_template("dklk.html")
+    return render_template('dklk.html')
+
+@app.route('/register', methods=['get', 'post'])
+def register():
+    err_msg = ''
+    if request.method.__eq__('POST'):
+        password = request.form['password']
+        confirm = request.form['confirm']
+        if password.__eq__(confirm):
+           try:
+               dao.register(name=request.form['name'],
+                            username=request.form['username'],
+                            password=password)
+               return redirect('/login')
+           except:
+               err_msg='Hệ thống đang có lỗi'
+
+        else:
+            err_msg = 'Mật khẩu không khớp'
+
+    return render_template("register.html", err_msg=err_msg)
 
 
-@app.route("/dsbs")
-def dsbs():
-    return render_template("dsbs.html")
+@app.route('/login',methods=['get', 'post'])
+@annonymous_user
+def login_my_user():
+    if request.method.__eq__('POST'):
+        username=request.form['username']
+        password=request.form['password']
 
+        user = dao.auth_user(username=username,password=password)
+        if user:
+            login_user(user=user)
+            return redirect('/')
 
-@app.route("/dangnhap")
-def dangnhap():
-    return render_template("dangnhap.html")
+    return render_template("login.html")
 
-
-# @app.route("/dn", methods = ["POST","GET"])
-# def dn():
-#     if request.method == "POST":
-#         user_name = request.form["name"]
-#         user_password = request.form["password"]
-#
-#         if user_name:
-#             session["user"] = user_name
-#             session["password"] = user_password
-#
-#
-#             return redirect("/dk")
-#     return render_template("dn.html")
-
-# @app.route("/dk")
-# def dk():
-#     if "user"and"password" in session:
-#         name = session["user"]
-#         password = session["password"]
-#         return f"<h1>Đăng kí thành công!!</h1>"
-#     else:
-#         return redirect(url_for("dn"))
 
 @app.route('/login-admin', methods=['post'])
 def login_admin():
@@ -56,7 +58,10 @@ def login_admin():
         login_user(user=user)
 
     return redirect('/admin')
-
+@app.route("/logout")
+def logout_my_user():
+    logout_user()
+    return redirect('/login')
 
 @app.route("/logout")
 def log_out():

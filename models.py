@@ -38,14 +38,9 @@ class BaseModel(db.Model):
 
 
 class User(BaseModel, UserMixin):
-    # firstname = Column(String(50))
-    # lastname = Column(String(50))
-    # sex=Column(Enum(Sex), default=Sex.OTHER)
-    # date_of_birth=Column(DateTime)
-    # address=Column(String(50))
+    name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    image = Column(String(100))
     active = Column(Boolean, default=True)
     user_role = Column(Enum(UserRole), default=UserRole.BENHNHAN)
 
@@ -75,7 +70,7 @@ class Medicine(BaseModel):
 if __name__ == '__main__':
     with app.app_context():
         import hashlib
-       # db.create_all()
+       #db.create_all()
         # c1 = Category(name='Đau dạ dày')
         # c2 = Category(name='Giảm sốt')
         # c3 = Category(name='Giảm đau bụng')
