@@ -14,13 +14,13 @@ def get_user_by_id(user_id):
 
 
 # thêm user
-def add_user(name, username, password,email):
+def add_user(name, username, password, **kwargs):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     user = User(name=name.strip(),
                 username=username.strip(),
                 password=password,
-                email=email
-                # avatar = kwargs.get('avatar')
-                )
+                email= kwargs.get('email'),
+                avatar = kwargs.get('avatar'))
+
     db.session.add(user)
     db.session.commit()

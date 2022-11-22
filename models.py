@@ -41,8 +41,10 @@ class User(BaseModel, UserMixin):
     name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    email = Column(String(50), nullable=False, unique=True)
+    avatar = Column(String(100))
+    email = Column(String(50))
     active = Column(Boolean, default=True)
+    joined_date = Column(DateTime, default=datetime.now())
     user_role = Column(Enum(UserRole), default=UserRole.BENHNHAN)
 
 
@@ -69,13 +71,16 @@ class Medicine(BaseModel):
 
 if __name__ == '__main__':
     with app.app_context():
+
         import hashlib
+
+        # db.create_all()
         # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
         # u = User(name = 'admin',username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
         # db.session.add(u)
         # db.session.commit()
 
-    # db.create_all()
+
     # c1 = Category(name='Đau dạ dày')
     # c2 = Category(name='Giảm sốt')
     # c3 = Category(name='Giảm đau bụng')
