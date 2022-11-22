@@ -1,6 +1,6 @@
 from pyweb.models import User
 from pyweb import db
-import hashlib #để băm
+import hashlib  # để băm
 
 
 def auth_user(username, password):
@@ -12,13 +12,14 @@ def auth_user(username, password):
 def get_user_by_id(user_id):
     return User.query.get(user_id)
 
-#thêm user
-def add_user(name,username,password,**kwargs):
+
+# thêm user
+def add_user(name, username, password,email):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
     user = User(name=name.strip(),
                 username=username.strip(),
                 password=password,
-                # email = kwargs.get('email'),
+                email=email
                 # avatar = kwargs.get('avatar')
                 )
     db.session.add(user)

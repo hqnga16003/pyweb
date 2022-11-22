@@ -41,6 +41,7 @@ class User(BaseModel, UserMixin):
     name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
+    email = Column(String(50), nullable=False, unique=True)
     active = Column(Boolean, default=True)
     user_role = Column(Enum(UserRole), default=UserRole.BENHNHAN)
 
@@ -66,21 +67,18 @@ class Medicine(BaseModel):
         return self.name
 
 
-
 if __name__ == '__main__':
     with app.app_context():
         import hashlib
-       #db.create_all()
-        # c1 = Category(name='Đau dạ dày')
-        # c2 = Category(name='Giảm sốt')
-        # c3 = Category(name='Giảm đau bụng')
-        # db.session.add_all([c1, c2, c3])
-        # db.session.commit()
-
-        # password = str(hashlib.md5('123456'.encode('utf-8')).hexdigest())
-        # u = User(username='admin', password=password,user_role = UserRole.ADMIN)
+        # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
+        # u = User(name = 'admin',username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
         # db.session.add(u)
         # db.session.commit()
 
-
+    # db.create_all()
+    # c1 = Category(name='Đau dạ dày')
+    # c2 = Category(name='Giảm sốt')
+    # c3 = Category(name='Giảm đau bụng')
+    # db.session.add_all([c1, c2, c3])
+    # db.session.commit()
 
