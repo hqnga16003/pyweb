@@ -5,7 +5,6 @@ from flask_login import login_user, logout_user
 from pyweb.decorators import annonymous_user
 
 
-
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -14,6 +13,10 @@ def index():
 @app.route("/dklk")
 def dklk():
     return render_template('dklk.html')
+
+@app.route("/dsbs")
+def dsbs():
+    return render_template('dsbs.html')
 
 
 @app.route('/register', methods=['get', 'post'])
@@ -74,6 +77,7 @@ def login_my_user():
 
 
 @app.route('/login-admin', methods=['post'])
+
 def login_admin():
     username = request.form['username']
     password = request.form['password']

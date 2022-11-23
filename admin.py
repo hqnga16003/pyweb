@@ -19,6 +19,7 @@ class AuthenticatedModelView(ModelView):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
 
 
+
 class LogoutView(AuthenticatedBaseView):
     @expose('/')
     def index(self):
