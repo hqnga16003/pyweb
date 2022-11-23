@@ -3,6 +3,8 @@ from flask import session
 from pyweb import app, dao, admin, login
 from flask_login import login_user, logout_user
 from pyweb.decorators import annonymous_user
+import cloudinary.uploader
+import cloudinary
 
 
 @app.route("/")
@@ -26,34 +28,45 @@ def user_register():
     #     name = request.form.get('name')
     #     username = request.form.get('username')
     #     password = request.form.get('password')
-    #     # email = request.form.get('email')
+    #     email = request.form.get('email')
     #     confirm = request.form.get('confirm')
     # try:
+    #     # check mk với xác nhan mk trung nhau
     #     if password.strip().__eq__(confirm.strip()):
-    #         dao.add_user(name=name, username=username, password=password, email=email)
+    #
+    #         dao.add_user(name=name,
+    #                      username=username,
+    #                      password=password,
+    #                      email=email)
     #         # nếu ko có lỗi sẽ trả về trang login
-    #         return redirect(url_for('login.html'))
+    #         return redirect(url_for('index'))
     #     else:
     #         err_msg = "Mat khau ko khop"
-    #
     # except Exception as ex:
     #     err_msg = "He thong dang co loi: " + str(ex)
-
-
-
     err_msg = ''
     if request.method.__eq__('POST'):
         password = request.form['password']
         confirm = request.form['confirm']
+        # avatar = request.files['avatar']
+        # check mk voi xac nhan mk co trung nhau
+        # if avatar:
+        #     res = cloudinary.uploader.upload(avatar)
+        #     avatar_path = res['secure_url']
         if password.__eq__(confirm):
            try:
+                # avatar = request.files['avatar']
+                # if avatar:
+                #    res = cloudinary.uploader.upload(avatar)
+                # avatar_path = res['secure_url']
                dao.add_user(name=request.form['name'],
                             username=request.form['username'],
                             password=password,
+                            # avatar=avatar_path,
                             email=request.form['email'])
-               return redirect('/login')
-           except:
-               err_msg='Hệ thống đang có lỗi'
+               return redirect(url_for('login'))
+           except Exception as ex:
+                err_msg = "He thong dang co loi: " + str(ex)
 
         else:
             err_msg = 'Mật khẩu không khớp'
