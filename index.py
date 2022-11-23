@@ -3,8 +3,8 @@ from flask import session
 from pyweb import app, dao, admin, login
 from flask_login import login_user, logout_user
 from pyweb.decorators import annonymous_user
-import cloudinary.uploader
-import cloudinary
+# import cloudinary.uploader
+# import cloudinary
 
 
 
@@ -43,8 +43,8 @@ def user_register():
     #     err_msg = "He thong dang co loi: " + str(ex)
     err_msg = ''
     if request.method.__eq__('POST'):
-        password = request.form['password']
-        confirm = request.form['confirm']
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
         # avatar = request.files['avatar']
         # check mk voi xac nhan mk co trung nhau
         # if avatar:
@@ -52,15 +52,10 @@ def user_register():
         #     avatar_path = res['secure_url']
         if password.__eq__(confirm):
            try:
-                # avatar = request.files['avatar']
-                # if avatar:
-                #    res = cloudinary.uploader.upload(avatar)
-                # avatar_path = res['secure_url']
-               dao.add_user(name=request.form['name'],
-                            username=request.form['username'],
+               dao.add_user(name=request.form.get('name'),
+                            username=request.form.get('username'),
                             password=password,
-                            # avatar=avatar_path,
-                            email=request.form['email'])
+                            email=request.form.get('email'))
                return redirect(url_for('login'))
            except Exception as ex:
                 err_msg = "He thong dang co loi: " + str(ex)
@@ -71,29 +66,31 @@ def user_register():
     return render_template("register.html", err_msg=err_msg)
 
 
-@app.route('/login', methods=['get', 'post'])
+@app.route('/user-login', methods=['get', 'post'])
 @annonymous_user
 def login_my_user():
+    err_msg = ''
     if request.method.__eq__('POST'):
-        username = request.form['username']
-        password = request.form['password']
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-        user = dao.auth_user(username=username, password=password)
+        user = dao.check_login(username=username, password=password)
         if user:
             login_user(user=user)
-            return redirect('/')
+            return redirect(url_for('index'))
+        else :
+            err_msg = 'Username hoac password ko chinh xac!'
 
-    return render_template("login.html")
+    return render_template("login.html", err_msg = err_msg)
 
 
 @app.route('/login-admin', methods=['post'])
 def login_admin():
-    username = request.form['username']
-    password = request.form['password']
-    user = dao.auth_user(username=username, password=password)
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user = dao.check_login(username=username, password=password)
     if user:
         login_user(user=user)
-
     return redirect('/admin')
 
 

@@ -41,7 +41,7 @@ class User(BaseModel, UserMixin):
     name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    avatar = Column(String(100))
+    # avatar = Column(String(100))
     email = Column(String(50))
     active = Column(Boolean, default=True)
     joined_date = Column(DateTime, default=datetime.now())
@@ -71,10 +71,10 @@ class Medicine(BaseModel):
 
 if __name__ == '__main__':
     with app.app_context():
-
+        # db.create_all()
         import hashlib
 
-        # db.create_all()
+
         # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
         # u = User(name = 'admin',username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
         # db.session.add(u)
