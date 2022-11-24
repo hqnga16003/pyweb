@@ -2,10 +2,12 @@
 
 {% block content %}
 <h1 class="text-center text-success">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
-
-<form method="post" action="/login">
-
-
+{% if err_msg %}
+<div class="alert alert-danger">
+    <h4>{{err_msg}}</h4>
+</div>
+{% endif %}
+<form method="post" action="{{url_for('login_my_user')}}">
     <div class="form-floating mb-3 mt-3">
         <input type="text" class="form-control" required id="username" placeholder="Nhập tên đăng nhập" name="username">
         <label for="username">Tên đăng nhập</label>
@@ -16,10 +18,7 @@
         <label for="password">Password</label>
     </div>
 
-
-
-
-    <div>
+   <div>
         <input type="submit" value="Đăng nhập" class="btn btn-danger">
     </div>
 
