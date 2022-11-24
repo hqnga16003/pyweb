@@ -71,7 +71,7 @@ def login_admin():
 @app.route("/logout")
 def logout_my_user():
     logout_user()
-    return redirect('login_my_user')
+    return redirect('/')
 
 
 @app.route("/logout")

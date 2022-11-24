@@ -7,31 +7,31 @@
         <div class="col-lg-8 col-xl-6">
             <div class="card rounded-3">
                 <div class="card-body p-4 p-md-5">
-                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Registration Info</h3>
+                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Thông tin đăng ký</h3>
 
                     <form class="px-md-2">
 
                         <div class="form-outline mb-4">
-                            <input type="text" id="form3Example1q" class="form-control"/>
-                            <label class="form-label" for="form3Example1q">Name</label>
+                            <input type="text" id="form3Example1q" class="form-control" placeholder="Nhập họ và tên"/>
+                            <label class="form-label" for="form3Example1q"></label>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
 
                                 <div class="form-outline datepicker">
-                                    <input type="text" class="form-control" id="exampleDatepicker1"/>
-                                    <label for="exampleDatepicker1" class="form-label">Select a date</label>
+                                    <input type="date" class="form-control" id="exampleDatepicker1"/>
+                                    <label for="exampleDatepicker1" class="form-label">Chọn ngày khám</label>
                                 </div>
 
                             </div>
                             <div class="col-md-6 mb-4">
 
                                 <select class="select">
-                                    <option value="1" disabled>Gender</option>
-                                    <option value="2">Female</option>
-                                    <option value="3">Male</option>
-                                    <option value="4">Other</option>
+                                    <option value="1" disabled>Giới tính</option>
+                                    <option value="2">Nam</option>
+                                    <option value="3">Nữ</option>
+                                    <option value="4">Khác</option>
                                 </select>
 
                             </div>
@@ -41,10 +41,10 @@
 
                             <select class="select">
                                 <option value="1" disabled>Class</option>
-                                <option value="2">Class 1</option>
-                                <option value="3">Class 2</option>
-                                <option value="4">Class 3</option>
+                                <option value="2">8h-11h</option>
+                                <option value="3">13h-16h30</option>
                             </select>
+                            <i>Chọn khung giờ khám</i>
 
                         </div>
 
@@ -52,11 +52,23 @@
                             <div class="col-md-6">
 
                                 <div class="form-outline">
-                                    <input type="text" id="form3Example1w" class="form-control"/>
-                                    <label class="form-label" for="form3Example1w">Registration code</label>
+                                    <textarea style="width:100%"></textarea>
+<!--                                    <input type="text" id="form3Example1w" class="form-control"/>-->
+                                    <label class="form-label" ">Vấn đề của bạn</label>
                                 </div>
 
                             </div>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <input type="text" id="form3Example1a" class="form-control" placeholder="Nhập số điện thoại"/>
+                            <label class="form-label" for="form3Example1q"></label>
+                        </div>
+
+                         <div class="form-outline mb-4">
+                             <hr>
+                            <p>Chúng tôi sẽ liên lạc với bạn, bạn vui lòng giữ máy để xác nhận lịch hẹn!!</p>
+                             <hr>
                         </div>
 
                         <button type="submit" class="btn btn-success btn-lg mb-1">Submit</button>
