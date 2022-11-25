@@ -10,8 +10,8 @@ admin = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4')
 
 
 class AuthenticatedBaseView(BaseView):
-    def is_visible(self):
-        return current_user.is_authenticated
+        def is_visible(self):
+            return current_user.is_authenticated
 
 
 class AuthenticatedModelView(ModelView):
@@ -24,7 +24,6 @@ class LogoutView(AuthenticatedBaseView):
     @expose('/')
     def index(self):
         logout_user()
-
         return redirect('/admin')
 
 

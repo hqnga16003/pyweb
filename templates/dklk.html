@@ -1,68 +1,76 @@
 {% extends 'layout/base.html' %}
 {% block content %}
+
+
 <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-lg-8 col-xl-6">
             <div class="card rounded-3">
                 <div class="card-body p-4 p-md-5">
-                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Đăng ký lịch khám</h3>
+                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Thông tin đăng ký</h3>
 
                     <form class="px-md-2">
+
+                        <div class="form-outline mb-4">
+                            <input type="text" id="form3Example1q" class="form-control" placeholder="Nhập họ và tên"/>
+                            <label class="form-label" for="form3Example1q"></label>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <div class="">
-                                    <input type="text" class="form-control" id="name"/>
-                                    <label for="name" class="form-label">Nhập tên</label>
-                                </div>
-                            </div>
 
+                                <div class="form-outline datepicker">
+                                    <input type="date" class="form-control" id="exampleDatepicker1"/>
+                                    <label for="exampleDatepicker1" class="form-label">Chọn ngày khám</label>
+                                </div>
+
+                            </div>
                             <div class="col-md-6 mb-4">
-                                <div class="">
-                                    <input type="text" class="form-control" id="sdt"/>
-                                    <label for="sdt" class="form-label">Nhập số điện thoại</label>
-                                </div>
-                            </div>
 
+                                <select class="select">
+                                    <option value="1" disabled>Giới tính</option>
+                                    <option value="2">Nam</option>
+                                    <option value="3">Nữ</option>
+                                    <option value="4">Khác</option>
+                                </select>
+
+                            </div>
                         </div>
 
                         <div class="mb-4">
+
                             <select class="select">
-                                <option value="1" disabled>Giới tính</option>
-                                <option value="2">Nam</option>
-                                <option value="3">Nữ</option>
-                                <option value="4">Khác</option>
+                                <option value="1" disabled>Class</option>
+                                <option value="2">8h-11h</option>
+                                <option value="3">13h-16h30</option>
                             </select>
+                            <i>Chọn khung giờ khám</i>
 
                         </div>
+
                         <div class="row mb-4 pb-2 pb-md-0 mb-md-5">
                             <div class="col-md-6">
 
                                 <div class="form-outline">
-                                    <label for="startDate">Ngày sinh</label>
-                                    <input id="startDate" class="form-control" type="date"/>
+                                    <textarea style="width:100%"></textarea>
+                                    <!--                                    <input type="text" id="form3Example1w" class="form-control"/>-->
+                                    <label class="form-label" >Vấn đề của bạn</label>
                                 </div>
 
                             </div>
                         </div>
 
                         <div class="form-outline mb-4">
-                            <input type="text" id="diachi" class="form-control"/>
-                            <label class="form-label" for="diachi">Nhập địa chỉ</label>
-
-
+                            <input type="text" id="form3Example1a" class="form-control"
+                                   placeholder="Nhập số điện thoại"/>
+                            <label class="form-label" for="form3Example1q"></label>
                         </div>
 
-                        <div class="row mb-4 pb-2 pb-md-0 mb-md-5">
-                            <div class="col-md-6">
-
-                                <div class="form-outline">
-                                    <label for="ngaykham">Ngày khám</label>
-                                    <input id="ngaykham" class="form-control" type="date"/>
-                                </div>
-
-                            </div>
+                        <div class="form-outline mb-4">
+                            <hr>
+                            <p>Chúng tôi sẽ liên lạc với bạn, bạn vui lòng giữ máy để xác nhận lịch hẹn!!</p>
+                            <hr>
                         </div>
-
 
                         <button type="submit" class="btn btn-success btn-lg mb-1">Submit</button>
 
@@ -73,6 +81,4 @@
         </div>
     </div>
 </div>
-
-
 {% endblock %}

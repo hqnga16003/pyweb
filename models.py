@@ -37,15 +37,56 @@ class BaseModel(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
 
 
+
+
 class User(BaseModel, UserMixin):
-    name = Column(String(50), nullable=False)
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
-    avatar = Column(String(100))
     email = Column(String(50))
     active = Column(Boolean, default=True)
     joined_date = Column(DateTime, default=datetime.now())
     user_role = Column(Enum(UserRole), default=UserRole.BENHNHAN)
+    userinfo = relationship("UserInfo", uselist=False, backref="user")
+
+class Nurse(BaseModel):
+
+    medicalist = relationship('MedicaList', backref='nurse', lazy=True)
+    user_id = Column(Integer, ForeignKey(User.id), unique=True)
+    user = relationship(User, uselist=False, backref="user")
+
+class Doctor(BaseModel):
+
+    medicalreport = relationship('MedicalReport', backref='doctor', lazy=True)
+    user_id = Column(Integer, ForeignKey(User.id), unique=True)
+    user = relationship(User, uselist=False, backref="user")
+
+
+
+
+class Patient(BaseModel): #benh nhan
+    name = Column(String(50), nullable=False)
+    sex = Column(Enum(Sex), default=Sex.OTHER)
+    dateofbirth = Column(DateTime)
+    address = Column(String(50))
+    phonenumber = Column(String(50))
+    MedicaList = relationship("PatientMedicaList", backref="patient")
+
+
+
+
+
+
+class UserInfo(BaseModel):
+    lastname = Column(String(50), nullable=False)
+    firstname = Column(String(50), nullable=False)
+    dateofbirth = Column(DateTime)
+    sex = Column(Enum(Sex), default=Sex.OTHER)
+    address = Column(String(50))
+    phonenumber = Column(String(50))
+    image = Column(String(100))
+    user_id = Column(Integer, ForeignKey(User.id), unique=True)
+
+
 
 
 class Category(BaseModel):
@@ -64,26 +105,65 @@ class Medicine(BaseModel):
     active = Column(Boolean, default=True)
     type = Column(Enum(TypeMedicine), default=TypeMedicine.VI)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
-
     def __str__(self):
         return self.name
 
 
+class MedicaList(BaseModel): #danh sach kham
+    name = Column(String(50), nullable=False)
+    medicaday = Column(DateTime)
+    nurse_id = Column(Integer, ForeignKey(Nurse.id), nullable=False)
+    patient = relationship("PatientMedicaList", backref="medicaList")
+
+
+class MedicalReport(BaseModel): #phieu kham
+    patient_id = Column(ForeignKey(Patient.id), primary_key=True)
+    medicalist = Column(ForeignKey(MedicaList.id), primary_key=True)
+    symptom = Column(String(50))
+    diseaseprediction = Column(String(50))
+    doctor_id = Column(Integer, ForeignKey(Doctor.id), nullable=False)
+
+
+
+
+
+
+
 if __name__ == '__main__':
     with app.app_context():
-
         import hashlib
+        db.create_all()
 
-        # db.create_all()
+
+        # benhnhan = Patient(name = "hoang quang nga1")
+        # db.session.add(benhnhan)
+        # db.session.commit()
+
+
+        # dskham = MedicaList(name="danh sach 2", nurse_id=1)
+        # db.session.add(dskham)
+        # db.session.commit()
+
+
+
+
+
+
         # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
-        # u = User(name = 'admin',username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
+        # u = User(username='yta', password=password, user_role=UserRole.YTA, email="admin@gmail.com")
         # db.session.add(u)
         # db.session.commit()
 
+            # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
+            # db.session.add(info)
+            # db.session.commit()
+
+        # yta = Nurse(user_id = 2)
+        # db.session.add(yta)
+        # db.session.commit()
 
     # c1 = Category(name='Đau dạ dày')
     # c2 = Category(name='Giảm sốt')
     # c3 = Category(name='Giảm đau bụng')
     # db.session.add_all([c1, c2, c3])
     # db.session.commit()
-

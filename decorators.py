@@ -19,7 +19,7 @@ def annonymous_user(f):
 # def annonymous_admin(f):
 #     @wraps(f)
 #     def decorated_func1(*args, **kwrags):
-#         if  current_user.user_role != UserRole.ADMIN:
+#         if current_user.is_authenticated and         current_user.user_role != UserRole.ADMIN:
 #             return redirect('/')
 #         return f(*args, **kwrags)
 #
