@@ -8,7 +8,6 @@ from datetime import datetime
 from enum import Enum as UserEnum
 from enum import Enum as TypeEnum
 from enum import Enum as Sex
-
 from flask_login import UserMixin
 
 
@@ -37,8 +36,6 @@ class BaseModel(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
 
 
-
-
 class User(BaseModel, UserMixin):
     username = Column(String(50), nullable=False, unique=True)
     password = Column(String(50), nullable=False)
@@ -48,31 +45,37 @@ class User(BaseModel, UserMixin):
     user_role = Column(Enum(UserRole), default=UserRole.BENHNHAN)
     userinfo = relationship("UserInfo", uselist=False, backref="user")
 
-class Nurse(BaseModel):
 
+class Nurse(BaseModel):
     medicalist = relationship('MedicaList', backref='nurse', lazy=True)
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
     user = relationship(User, uselist=False, backref="user")
 
-class Doctor(BaseModel):
+class Cashier(BaseModel):
+    user_id = Column(Integer, ForeignKey(User.id), unique=True)
+    user = relationship(User, uselist=False, backref="user")
+    receipt = relationship('Receipt', backref='cashier', lazy=True)
 
+
+
+class Doctor(BaseModel):
+    position = Column(String(50))
+    degree = Column(String(50))
     medicalreport = relationship('MedicalReport', backref='doctor', lazy=True)
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
     user = relationship(User, uselist=False, backref="user")
 
 
-
-
-class Patient(BaseModel): #benh nhan
+class Patient(BaseModel):  # benh nhan
     name = Column(String(50), nullable=False)
     sex = Column(Enum(Sex), default=Sex.OTHER)
     dateofbirth = Column(DateTime)
     address = Column(String(50))
     phonenumber = Column(String(50))
+    identitycard = Column(String(50))
     MedicaList = relationship("PatientMedicaList", backref="patient")
-
-
-
+    patienthistory = relationship('patienthistory', backref='patient', lazy=True)
+    receipt = relationship('Receipt', backref='patient', lazy=True)
 
 
 
@@ -85,8 +88,6 @@ class UserInfo(BaseModel):
     phonenumber = Column(String(50))
     image = Column(String(100))
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
-
-
 
 
 class Category(BaseModel):
@@ -102,27 +103,54 @@ class Medicine(BaseModel):
     describe = Column(Text)
     price = Column(Float, default=0)
     image = Column(String(100))
+    dateofmanufacture = Column(DateTime)
+    expirydate = Column(DateTime)
     active = Column(Boolean, default=True)
     type = Column(Enum(TypeMedicine), default=TypeMedicine.VI)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+    medicalreport = relationship("DetailMedicalRepor", backref="medicine")
+
     def __str__(self):
         return self.name
 
 
-class MedicaList(BaseModel): #danh sach kham
+class MedicaList(BaseModel):  # danh sach kham
     name = Column(String(50), nullable=False)
     medicaday = Column(DateTime)
     nurse_id = Column(Integer, ForeignKey(Nurse.id), nullable=False)
     patient = relationship("PatientMedicaList", backref="medicaList")
 
 
-class MedicalReport(BaseModel): #phieu kham
+class MedicalReport(BaseModel):  # phieu kham
     patient_id = Column(ForeignKey(Patient.id), primary_key=True)
     medicalist = Column(ForeignKey(MedicaList.id), primary_key=True)
     symptom = Column(String(50))
     diseaseprediction = Column(String(50))
     doctor_id = Column(Integer, ForeignKey(Doctor.id), nullable=False)
+    medicine = relationship("DetailMedicalRepor", backref="mmedicalReport")
 
+
+class PatientHistory(BaseModel):  # lich su benh nhan
+    kindofdisease = Column(String(100))
+    patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
+
+
+
+class Receipt(BaseModel):  # hoa don
+    medicalexaminationcash = Column(Integer, default=100000)
+    medicinecash = Column(Integer)
+    datecreated = Column(DateTime)
+    patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
+    detailmedicalrepor = relationship('DetailMedicalRepor', backref='receipt', lazy=True)
+    cashier_id = Column(Integer, ForeignKey(Cashier.id), nullable=False)
+
+class DetailMedicalRepor(BaseModel):  # chi tiet phieu kham
+    medicalreport_id = Column(ForeignKey(MedicalReport.id), primary_key=True)
+    medicine = Column(ForeignKey(Medicine.id), primary_key=True)
+    quantity = Column(Integer)
+    unitprice = Column(Integer)
+    use = Column(String(100))
+    receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
 
 
 
@@ -134,29 +162,22 @@ if __name__ == '__main__':
         import hashlib
         db.create_all()
 
-
         # benhnhan = Patient(name = "hoang quang nga1")
         # db.session.add(benhnhan)
         # db.session.commit()
 
-
         # dskham = MedicaList(name="danh sach 2", nurse_id=1)
         # db.session.add(dskham)
         # db.session.commit()
-
-
-
-
-
 
         # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
         # u = User(username='yta', password=password, user_role=UserRole.YTA, email="admin@gmail.com")
         # db.session.add(u)
         # db.session.commit()
 
-            # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
-            # db.session.add(info)
-            # db.session.commit()
+        # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
+        # db.session.add(info)
+        # db.session.commit()
 
         # yta = Nurse(user_id = 2)
         # db.session.add(yta)
