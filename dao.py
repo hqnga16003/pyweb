@@ -15,9 +15,9 @@ def get_user_by_id(user_id):
 
 
 # thêm user
-def add_user(name, username, password, **kwargs):
+def add_user(username, password, **kwargs):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    user = User(name=name.strip(),
+    user = User(
                 username=username.strip(),
                 password=password,
                 email= kwargs.get('email'),
@@ -25,3 +25,6 @@ def add_user(name, username, password, **kwargs):
 
     db.session.add(user)
     db.session.commit()
+
+def add_patient():
+    pass

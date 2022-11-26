@@ -58,7 +58,7 @@ class Nurse(BaseModel):
 class Cashier(BaseModel):
     user = relationship(User, uselist=False, backref="usercashier")
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
-   # receipt = relationship('Receipt', backref='cashier', lazy=True)
+    receipt = relationship('Receipt', backref='cashier', lazy=True)
 
 
 class Doctor(BaseModel):
@@ -174,7 +174,7 @@ if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-        #db.create_all()
+        db.create_all()
 
         # benhnhan = Patient(name = "hoang quang nga1")
         # db.session.add(benhnhan)
