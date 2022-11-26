@@ -16,13 +16,7 @@ class UserRole(UserEnum):
     BACSI = 2
     YTA = 3
     THUNGAN = 4
-    BENHNHAN = 5
-
-
-class TypeMedicine(TypeEnum):
-    VIEN = 1
-    CHAI = 2
-    VI = 3
+    NGUOIDUNG = 5
 
 
 class Sex(Sex):
@@ -42,7 +36,7 @@ class User(BaseModel, UserMixin):
     email = Column(String(50))
     active = Column(Boolean, default=True)
     joined_date = Column(DateTime, default=datetime.now())
-    user_role = Column(Enum(UserRole), default=UserRole.BENHNHAN)
+    user_role = Column(Enum(UserRole), default=UserRole.NGUOIDUNG)
     userinfo = relationship("UserInfo", uselist=False, backref="user")
 
 
@@ -51,11 +45,11 @@ class Nurse(BaseModel):
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
     user = relationship(User, uselist=False, backref="user")
 
+
 class Cashier(BaseModel):
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
     user = relationship(User, uselist=False, backref="user")
     receipt = relationship('Receipt', backref='cashier', lazy=True)
-
 
 
 class Doctor(BaseModel):
@@ -78,7 +72,6 @@ class Patient(BaseModel):  # benh nhan
     receipt = relationship('Receipt', backref='patient', lazy=True)
 
 
-
 class UserInfo(BaseModel):
     lastname = Column(String(50), nullable=False)
     firstname = Column(String(50), nullable=False)
@@ -98,6 +91,11 @@ class Category(BaseModel):
         return self.name
 
 
+class Unit(BaseModel):
+    name = Column(String(50))
+    medicines = relationship('Medicine', backref='unit', lazy=True)
+
+
 class Medicine(BaseModel):
     name = Column(String(50), nullable=False)
     describe = Column(Text)
@@ -106,8 +104,8 @@ class Medicine(BaseModel):
     dateofmanufacture = Column(DateTime)
     expirydate = Column(DateTime)
     active = Column(Boolean, default=True)
-    type = Column(Enum(TypeMedicine), default=TypeMedicine.VI)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+    unit_id = Column(Integer, ForeignKey(Unit.id), nullable=False)
     medicalreport = relationship("DetailMedicalRepor", backref="medicine")
 
     def __str__(self):
@@ -136,6 +134,24 @@ class PatientHistory(BaseModel):  # lich su benh nhan
 
 
 
+
+
+class Statistic(BaseModel):  # thong ke
+    __abstract__ = True
+    statisticalmonth = Column(DateTime)
+
+
+class RevenueStatistics(Statistic):  # thong ke doanh thu
+    statisticaldate = Column(DateTime)
+    ratio = Column(Float)
+    receipt = relationship('Receipt', backref='revenueStatistics', lazy=True)
+
+
+class MedicineUseStatistics(Statistic):  # thong ke su dung thuoc
+    numberofuses = Column(Integer)
+    detailmedicalrepor = relationship('DetailMedicalRepor', backref='medicineUseStatistics', lazy=True)
+
+
 class Receipt(BaseModel):  # hoa don
     medicalexaminationcash = Column(Integer, default=100000)
     medicinecash = Column(Integer)
@@ -143,6 +159,8 @@ class Receipt(BaseModel):  # hoa don
     patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
     detailmedicalrepor = relationship('DetailMedicalRepor', backref='receipt', lazy=True)
     cashier_id = Column(Integer, ForeignKey(Cashier.id), nullable=False)
+    revenueStatistics_id = Column(Integer, ForeignKey(RevenueStatistics.id), nullable=False)
+
 
 class DetailMedicalRepor(BaseModel):  # chi tiet phieu kham
     medicalreport_id = Column(ForeignKey(MedicalReport.id), primary_key=True)
@@ -151,15 +169,13 @@ class DetailMedicalRepor(BaseModel):  # chi tiet phieu kham
     unitprice = Column(Integer)
     use = Column(String(100))
     receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
-
-
-
-
+    medicineusestatistics_id = Column(Integer, ForeignKey(MedicineUseStatistics.id), nullable=False)
 
 
 if __name__ == '__main__':
     with app.app_context():
         import hashlib
+
         db.create_all()
 
         # benhnhan = Patient(name = "hoang quang nga1")
