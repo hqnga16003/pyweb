@@ -71,7 +71,7 @@ class Doctor(BaseModel):
 
 class Patient(BaseModel):  # benh nhan
     name = Column(String(50), nullable=False)
-    sex = Column(Enum(Sex), default=Sex.OTHER)
+    sex = Column(String(50))
     dateofbirth = Column(DateTime)
     address = Column(String(50))
     phonenumber = Column(String(50))
@@ -176,9 +176,6 @@ if __name__ == '__main__':
 
         db.create_all()
 
-        # benhnhan = Patient(name = "hoang quang nga1")
-        # db.session.add(benhnhan)
-        # db.session.commit()
 
         # dskham = MedicaList(name="danh sach 2", nurse_id=1)
         # db.session.add(dskham)

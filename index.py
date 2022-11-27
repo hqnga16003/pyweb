@@ -15,14 +15,22 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/dklk")
-def dklk():
-    return render_template('dklk.html')
-
-
 @app.route("/dsbs")
 def dsbs():
     return render_template('dsbs.html')
+
+
+@app.route("/dklk", methods=['get', 'post'])
+def dklk():
+    err_msg = ''
+    if request.method.__eq__('POST'):
+        dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
+                        sex=request.form.get('sex'),
+                        phonenumber=request.form.get('phonenumber'), identitycard=request.form.get('identitycard')
+                        , address=request.form.get('address'))
+        return render_template('index.html')
+
+    return render_template('dklk.html')
 
 
 @app.route('/register', methods=['get', 'post'])
