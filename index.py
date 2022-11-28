@@ -34,7 +34,7 @@ def dklk():
 
 
 @app.route('/register', methods=['get', 'post'])
-def user_register():
+def register():
     err_msg = ''
     if request.method.__eq__('POST'):
         password = request.form.get('password')
@@ -45,15 +45,15 @@ def user_register():
                              username=request.form.get('username'),
                              password=password,
                              email=request.form.get('email'))
-                return render_template('login.html')
+                return redirect('/login')
             except Exception as ex:
                 err_msg = "He thong dang co loi: " + str(ex)
         else:
             err_msg = 'Mật khẩu không khớp'
-    return render_template("register.html", err_msg=err_msg)
+    return render_template('register.html', err_msg=err_msg)
 
 
-@app.route('/user-login', methods=['get', 'post'])
+@app.route('/login', methods=['get', 'post'])
 @annonymous_user
 def login_my_user():
     err_msg = ''
@@ -64,11 +64,11 @@ def login_my_user():
         user = dao.check_login(username=username, password=password)
         if user:
             login_user(user=user)
-            return redirect(url_for('index'))
+            n = request.args.get("next")
+            return redirect(n if n else '/')
         else:
             err_msg = 'Username hoac password ko chinh xac!'
-
-    return render_template("login.html", err_msg=err_msg)
+    return render_template("login.html",err_msg=err_msg)
 
 
 # @annonymous_admin

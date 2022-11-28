@@ -20,20 +20,20 @@
          {% if current_user.is_authenticated %}
           <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link " href="{{url_for('index')}}">Chào {{ current_user.username }}  </a>
+                <a class="nav-link " href="/">Chào {{ current_user.username }}  </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{url_for('logout_my_user')}}">Đăng xuất</a>
+                <a class="nav-link" href="/logout">Đăng xuất</a>
             </li>
         </ul>
          {% else %}
 
         <ul class="navbar-nav">
             <li class="nav-item">
-                <a class="nav-link text-success " href="{{url_for('login_my_user')}}">Đăng nhập</a>
+                <a class="nav-link text-success " href="/login">Đăng nhập</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-danger" href="{{url_for('user_register')}}">Đăng ký</a>
+                <a class="nav-link text-danger" href="/register">Đăng ký</a>
             </li>
         </ul>
             {% endif %}

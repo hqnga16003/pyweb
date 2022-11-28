@@ -9,10 +9,12 @@
                 <div class="card-body p-4 p-md-5">
                     <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Thông tin đăng ký</h3>
 
+
+                    {% if current_user.is_authenticated %}
                     <form method="post" action="/dklk" class="px-md-2">
 
                         <div class="form-outline mb-4">
-                            <input type="text" id="name" class="form-control" placeholder="Nhập họ và tên" name = "name"/>
+                            <input type="text" id="name" class="form-control" placeholder="Nhập họ và tên" name="name"/>
                             <label class="form-label" for="name"></label>
                         </div>
 
@@ -20,14 +22,14 @@
                             <div class="col-md-6 mb-4">
 
                                 <div class="form-outline datepicker">
-                                    <input type="date" class="form-control" id="dateofbirth" name = "dateofbirth"/>
+                                    <input type="date" class="form-control" id="dateofbirth" name="dateofbirth"/>
                                     <label for="dateofbirth" class="form-label">Ngày sinh</label>
                                 </div>
 
                             </div>
                             <div class="col-md-6 mb-4">
 
-                                <select class="select" id=sex name = "sex">
+                                <select class="select" id=sex name="sex">
                                     <option value="1" disabled>Giới tính</option>
                                     <option value="Nam">Nam</option>
                                     <option value="Nữ">Nữ</option>
@@ -40,7 +42,7 @@
                         <div class="col-md-6 mb-4">
 
                             <div class="form-outline datepicker">
-                                <input type="date" class="form-control" id="medicaday" name = "medicaday"/>
+                                <input type="date" class="form-control" id="medicaday" name="medicaday"/>
                                 <label for="medicaday" class="form-label">Chọn ngày khám</label>
                             </div>
 
@@ -49,18 +51,18 @@
 
                         <div class="form-outline mb-4">
                             <input type="text" id="phonenumber" class="form-control"
-                                   placeholder="Nhập số điện thoại" name = "phonenumber"/>
+                                   placeholder="Nhập số điện thoại" name="phonenumber"/>
                             <label class="form-label" for="phonenumber"></label>
                         </div>
                         <div class="form-outline mb-4">
                             <input type="text" id="identitycard" class="form-control"
-                                   placeholder="Nhập chứng minh nhân dân"  name = "identitycard"/>
+                                   placeholder="Nhập chứng minh nhân dân" name="identitycard"/>
                             <label class="form-label" for="identitycard"></label>
                         </div>
 
                         <div class="form-outline mb-4">
                             <input type="text" id="address" class="form-control"
-                                   placeholder="Nhập địa chỉ" name = "address"/>
+                                   placeholder="Nhập địa chỉ" name="address"/>
                             <label class="form-label" for="address"></label>
                         </div>
 
@@ -71,10 +73,13 @@
                         </div>
 
 
-
                         <button type="submit" class="btn btn-success btn-lg mb-1">Đăng ký</button>
 
                     </form>
+
+                    {% else %}
+                    <p>Vui lòng <a href="/login?next=/dklk">đăng nhập</a> để thanh toán!</p>
+                    {% endif %}
 
                 </div>
             </div>
