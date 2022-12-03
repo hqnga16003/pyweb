@@ -50,32 +50,32 @@ class UserInfo(BaseModel):
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
 
 
-class Nurse(BaseModel):
-    user = relationship(User, uselist=False, backref="user_nurse")
-    user_id = Column(Integer, ForeignKey(User.id), unique=True)
-    medicalist = relationship('MedicaList', backref='nurse', lazy=True)
+# class Nurse(BaseModel):
+#     user = relationship(User, uselist=False, backref="user_nurse")
+#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
+#     medicalist = relationship('MedicaList', backref='nurse', lazy=True)
 
 
 
-class Cashier(BaseModel):
-    user = relationship(User, uselist=False, backref="user_cashier")
-    user_id = Column(Integer, ForeignKey(User.id), unique=True)
-    receipt = relationship('Receipt', backref='cashier', lazy=True)
+# class Cashier(BaseModel):
+#     user = relationship(User, uselist=False, backref="user_cashier")
+#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
+#     receipt = relationship('Receipt', backref='cashier', lazy=True)
 
 
-class Doctor(BaseModel):
-    user = relationship(User, uselist=False, backref="user_doctor")
-    user_id = Column(Integer, ForeignKey(User.id), unique=True)
-    position = Column(String(50))
-    degree = Column(String(50))
-    medicalreport = relationship('MedicalReport', backref='doctor', lazy=True)
+# class Doctor(BaseModel):
+#     user = relationship(User, uselist=False, backref="user_doctor")
+#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
+#     position = Column(String(50))
+#     degree = Column(String(50))
+#     medicalreport = relationship('MedicalReport', backref='doctor', lazy=True)
 
 
-class Admin(BaseModel):
-    user = relationship(User, uselist=False, backref="user_admin")
-    user_id = Column(Integer, ForeignKey(User.id), unique=True)
-    regulationsmedicalexpenses = relationship('RegulationsMedicalExpenses', backref='admin', lazy=True)
-    patientregulations = relationship('PatientRegulations', backref='admin', lazy=True)
+# class Admin(BaseModel):
+#     user = relationship(User, uselist=False, backref="user_admin")
+#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
+#     regulationsmedicalexpenses = relationship('RegulationsMedicalExpenses', backref='admin', lazy=True)
+#     patientregulations = relationship('PatientRegulations', backref='admin', lazy=True)
 
 
 
@@ -100,12 +100,12 @@ class PatientRegulations(BaseModel): # quy dinh so benh nhan
     amount = Column(Integer, default=40)
     startday = Column(DateTime)
     endday = Column(DateTime)
-    admin_id = Column(Integer, ForeignKey(Admin.id), nullable=False)
+    admin_id = Column(Integer, ForeignKey(User.id), nullable=False)
     medicalist = relationship('MedicaList', backref='patientregulations', lazy=True)
 
 class MedicaList(BaseModel):  # danh sach kham
     name = Column((DateTime), nullable=False,unique = True)
-    nurse_id = Column(Integer, ForeignKey(Nurse.id), nullable=False)
+    nurse_id = Column(Integer, ForeignKey(User.id), nullable=False)
     patientregulations_id = Column(Integer, ForeignKey(PatientRegulations.id), nullable=False)
 
 
@@ -120,7 +120,7 @@ class MedicalReport(BaseModel):  # phieu kham
     symptom = Column(String(50))
     diseaseprediction = Column(String(50))
     patient_medicalist_id = Column(ForeignKey(Patient_MedicaList.id), unique=True)
-    doctor_id = Column(Integer, ForeignKey(Doctor.id), nullable=False)
+    doctor_id = Column(Integer, ForeignKey(User.id), nullable=False)
     details = relationship('DetailMedicalReport', backref='medicalreport', lazy=True)
 
 
@@ -169,7 +169,7 @@ class RegulationsMedicalExpenses(BaseModel): # quy dinh tien kham benh
     medicalexpenses = Column(Integer, default=100000)
     startday = Column(DateTime)
     endday = Column(DateTime)
-    admin_id = Column(Integer, ForeignKey(Admin.id), nullable=False)
+    admin_id = Column(Integer, ForeignKey(User.id), nullable=False)
     receipt = relationship('Receipt', backref='regulationsmedicalexpenses', lazy=True)
 
 class Receipt(BaseModel):  # hoa don
@@ -177,7 +177,7 @@ class Receipt(BaseModel):  # hoa don
     datecreated = Column(DateTime)
     patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
     detailmedicalreports = relationship('DetailMedicalReport', backref='receipt', lazy=True)
-    cashier_id = Column(Integer, ForeignKey(Cashier.id), nullable=False)
+    cashier_id = Column(Integer, ForeignKey(User.id), nullable=False)
     regulationsmedicalexpenses_id = Column(Integer, ForeignKey(RegulationsMedicalExpenses.id), nullable=False)
 
 
@@ -202,18 +202,16 @@ if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-        #db.create_all()
+        db.create_all()
 
         # dskham = MedicaList(name="danh sach 2", nurse_id=1)
         # db.session.add(dskham)
         # db.session.commit()
 
-        password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
-        u = User(username='yta', password=password, user_role=UserRole.YTA, email="admin@gmail.com")
-        nurse = Nurse()
-        db.session.add(nurse)
-       # db.session.add(u)
-        db.session.commit()
+        # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
+        # u = User(username='yta', password=password, user_role=UserRole.YTA, email="admin@gmail.com")
+        # db.session.add(u)
+        # db.session.commit()
 
         # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
         # db.session.add(info)
