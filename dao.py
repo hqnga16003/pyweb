@@ -27,8 +27,8 @@ def add_user(username, password, **kwargs):
     db.session.commit()
 
 
-def add_patient(name, sex, dateofbirth, address, phonenumber, identitycard):
+def add_patient(name, sex, dateofbirth, address, phonenumber):
     patient = Patient(name=name, sex=sex, dateofbirth=dateofbirth,
-                      address=address, phonenumber=phonenumber, identitycard=identitycard)
+                      address=address, phonenumber=phonenumber)
     db.session.add(patient)
     db.session.commit()

@@ -1,0 +1,20 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+<h1>Tạo ngày khám khám</h1>
+<form action="">
+    <div class="col-md-4 mb-4">
+
+        <div class="form-outline datepicker">
+            <input type="date" class="form-control" id="medicalexaminationday" name="medicalexaminationday"/>
+            <label for="medicalexaminationday" class="form-label">Chọn ngày tạo</label>
+        </div>
+
+
+    </div>
+
+
+    <div>
+        <input type="submit" value="Tạo" class="btn btn-danger">
+    </div>
+</form>
+{% endblock %}

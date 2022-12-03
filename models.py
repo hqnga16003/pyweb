@@ -96,11 +96,18 @@ class PatientHistory(BaseModel):  # lich su benh nhan
     kindofdisease = Column(String(100))
     patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False, unique=True)
 
+class PatientRegulations(BaseModel): # quy dinh so benh nhan
+    amount = Column(Integer, default=40)
+    startday = Column(DateTime)
+    endday = Column(DateTime)
+    admin_id = Column(Integer, ForeignKey(Admin.id), nullable=False)
+    medicalist = relationship('MedicaList', backref='patientregulations', lazy=True)
 
 class MedicaList(BaseModel):  # danh sach kham
-    name = Column(String(50), nullable=False)
-    medicaday = Column(DateTime)
+    name = Column((DateTime), nullable=False,unique = True)
     nurse_id = Column(Integer, ForeignKey(Nurse.id), nullable=False)
+    patientregulations_id = Column(Integer, ForeignKey(PatientRegulations.id), nullable=False)
+
 
 
 class Patient_MedicaList(BaseModel):  # benh nhan_ danh sach benh nhan
@@ -184,28 +191,29 @@ class DetailMedicalReport(BaseModel):  # chi tiet phieu kham
 
 
 
-class PatientRegulations(BaseModel): # quy dinh so benh nhan
-    amount = Column(Integer, default=40)
-    startday = Column(DateTime)
-    endday = Column(DateTime)
-    admin_id = Column(Integer, ForeignKey(Admin.id), nullable=False)
-    medicalist = relationship(MedicaList, backref='patientregulations', lazy=True)
+
+
+
+
+
 
 
 if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-        db.create_all()
+        #db.create_all()
 
         # dskham = MedicaList(name="danh sach 2", nurse_id=1)
         # db.session.add(dskham)
         # db.session.commit()
 
-        # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
-        # u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
-        # db.session.add(u)
-        # db.session.commit()
+        password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
+        u = User(username='yta', password=password, user_role=UserRole.YTA, email="admin@gmail.com")
+        nurse = Nurse()
+        db.session.add(nurse)
+       # db.session.add(u)
+        db.session.commit()
 
         # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
         # db.session.add(info)

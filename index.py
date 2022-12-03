@@ -14,6 +14,10 @@ from pyweb.models import UserRole
 def index():
     return render_template('index.html')
 
+@app.route("/taodskham")
+def taodskham():
+    return render_template('taodskham.html')
+
 
 @app.route("/dsbs")
 def dsbs():
@@ -26,8 +30,7 @@ def dklk():
     if request.method.__eq__('POST'):
         dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
                         sex=request.form.get('sex'),
-                        phonenumber=request.form.get('phonenumber'), identitycard=request.form.get('identitycard')
-                        , address=request.form.get('address'))
+                        phonenumber=request.form.get('phonenumber'), address=request.form.get('address'))
         return render_template('index.html')
 
     return render_template('dklk.html')
