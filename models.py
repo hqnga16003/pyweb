@@ -50,37 +50,6 @@ class UserInfo(BaseModel):
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
 
 
-# class Nurse(BaseModel):
-#     user = relationship(User, uselist=False, backref="user_nurse")
-#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
-#     medicalist = relationship('MedicaList', backref='nurse', lazy=True)
-
-
-
-# class Cashier(BaseModel):
-#     user = relationship(User, uselist=False, backref="user_cashier")
-#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
-#     receipt = relationship('Receipt', backref='cashier', lazy=True)
-
-
-# class Doctor(BaseModel):
-#     user = relationship(User, uselist=False, backref="user_doctor")
-#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
-#     position = Column(String(50))
-#     degree = Column(String(50))
-#     medicalreport = relationship('MedicalReport', backref='doctor', lazy=True)
-
-
-# class Admin(BaseModel):
-#     user = relationship(User, uselist=False, backref="user_admin")
-#     user_id = Column(Integer, ForeignKey(User.id), unique=True)
-#     regulationsmedicalexpenses = relationship('RegulationsMedicalExpenses', backref='admin', lazy=True)
-#     patientregulations = relationship('PatientRegulations', backref='admin', lazy=True)
-
-
-
-
-
 
 class Patient(BaseModel):  # benh nhan
     name = Column(String(50), nullable=False)
@@ -88,6 +57,7 @@ class Patient(BaseModel):  # benh nhan
     dateofbirth = Column(DateTime)
     address = Column(String(50))
     phonenumber = Column(String(50))
+    identitycard= Column(String(50),unique = True)
     patienthistory = relationship('PatientHistory', backref='patienthistory', uselist=False)
     receipt = relationship('Receipt', backref='patient', lazy=True)
 
@@ -106,7 +76,7 @@ class PatientRegulations(BaseModel): # quy dinh so benh nhan
 class MedicaList(BaseModel):  # danh sach kham
     name = Column((DateTime), nullable=False,unique = True)
     nurse_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    patientregulations_id = Column(Integer, ForeignKey(PatientRegulations.id), nullable=False)
+    patientregulations_id = Column(Integer, ForeignKey(PatientRegulations.id)) #, nullable=False
 
 
 
@@ -159,9 +129,6 @@ class Medicine(BaseModel):
 
 
 
-medicine_unit = db.Table('medicine_unit',
-                    Column('medicine_id', Integer, ForeignKey(Medicine.id), primary_key=True),
-                    Column('tag_unit', Integer, ForeignKey(Unit.id  ), primary_key=True))
 
 
 
@@ -202,7 +169,7 @@ if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-        db.create_all()
+      #  db.create_all()
 
         # dskham = MedicaList(name="danh sach 2", nurse_id=1)
         # db.session.add(dskham)

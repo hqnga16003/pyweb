@@ -14,9 +14,15 @@ from pyweb.models import UserRole
 def index():
     return render_template('index.html')
 
-@app.route("/taodskham")
+
+@app.route("/taodskham", methods=['get', 'post'])
 def taodskham():
-    return render_template('taodskham.html')
+    date = request.args.get('date')
+    patients = dao.load_patient(date)
+    if request.method.__eq__('POST'):
+        dao.create_medicalist(name=request.form.get('medicalexaminationday'))
+
+    return render_template('taodskham.html',patients=patients)
 
 
 @app.route("/dsbs")
@@ -28,9 +34,13 @@ def dsbs():
 def dklk():
     err_msg = ''
     if request.method.__eq__('POST'):
-        dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
-                        sex=request.form.get('sex'),
-                        phonenumber=request.form.get('phonenumber'), address=request.form.get('address'))
+        dao.add_patient_medicalist(
+            patient_id=dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
+                                       sex=request.form.get('sex'),
+                                       phonenumber=request.form.get('phonenumber'),
+                                       address=request.form.get('address'),
+                                       identitycard=request.form.get('identitycard')),
+            date=request.form.get('medicaday'))
         return render_template('index.html')
 
     return render_template('dklk.html')
@@ -71,7 +81,7 @@ def login_my_user():
             return redirect(n if n else '/')
         else:
             err_msg = 'Username hoac password ko chinh xac!'
-    return render_template("login.html",err_msg=err_msg)
+    return render_template("login.html", err_msg=err_msg)
 
 
 # @annonymous_admin
