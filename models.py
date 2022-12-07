@@ -39,6 +39,7 @@ class User(BaseModel, UserMixin):
     userinfo = relationship("UserInfo", uselist=False, backref="user")
 
 
+
 class UserInfo(BaseModel):
     lastname = Column(String(50), nullable=False)
     firstname = Column(String(50), nullable=False)
@@ -169,7 +170,8 @@ if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-      #  db.create_all()
+        # db.create_all()
+
 
         # dskham = MedicaList(name="danh sach 2", nurse_id=1)
         # db.session.add(dskham)
