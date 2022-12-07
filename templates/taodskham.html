@@ -5,7 +5,7 @@
     <div class="col-md-4 mb-4">
 
         <div class="form-outline datepicker">
-            <input type="date" class="form-control" id="medicalexaminationday"  name="medicalexaminationday"/>
+            <input type="date" class="form-control" id="medicalexaminationday" name="medicalexaminationday"/>
             <label for="medicalexaminationday" class="form-label">Chọn ngày tạo</label>
         </div>
 
@@ -14,32 +14,4 @@
         <input type="submit" value="Tạo" class="btn btn-danger">
     </div>
 </form>
-
-
-  <div class="col-md-4 mb-4">
-
-        <div class="form-outline datepicker">
-            <input type="date" class="form-control" id="date"  name="date"/>
-            <label for="date" class="form-label">Chọn ngày </label>
-        </div>
-
-    </div>
-<table class="table">
-    <tr>
-        <th>STT</th>
-        <th>Họ tên</th>
-        <th>Giới tính</th>
-        <th>Năm sinh</th>
-        <th>Địa chỉ</th>
-    </tr>
-    {% for c in patients %}
-    <tr >
-        <td>{{ c.id }}</td>
-        <td>{{ c.name }}</td>
-        <td>{{ c.sex }}</td>
-        <td>{{ c.dateofbirth }}</td>
-        <td>{{ c.address }}</td>
-    </tr>
-    {% endfor %}
-</table>
-{% endblock %}
+{% endblock  %}

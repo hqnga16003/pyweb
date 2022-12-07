@@ -1,0 +1,32 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+<ul class="nav">
+    {% for m in medicalists %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{url_for('xemdanhsachkham',medicalist_id = m.id)}}">{{m.name}}</a>
+    </li>
+    {%endfor%}
+</ul>
+<table class="table">
+    <tr>
+        <th>STT</th>
+        <th>Họ tên</th>
+        <th>Giới tính</th>
+        <th>Năm sinh</th>
+        <th>Địa chỉ</th>
+    </tr>
+    {% for c in patients %}
+    <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.sex }}</td>
+        <td>{{ c.dateofbirth }}</td>
+        <td>{{ c.address }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+ <div>
+        <input type="button" value="Hoàn tất danh sách khám " class="btn btn-danger">
+    </div>
+{% endblock %}

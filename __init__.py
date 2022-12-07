@@ -10,6 +10,8 @@ from flask_login import LoginManager
 #             api_secret = 'IfZHy4Eo6qATCRCAFHPu4qjLFjA',
 #
 # )
+
+
 app = Flask(__name__)
 app.secret_key = '32342sdfsfsdfdsfsdf'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:%s@localhost/flashweb?charset=utf8mb4' % quote(

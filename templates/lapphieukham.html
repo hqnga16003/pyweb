@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+{% block content %}
+
+
+<table class="table">
+    <tr>
+        <th>STT</th>
+        <th>Họ tên</th>
+        <th>Giới tính</th>
+        <th>Năm sinh</th>
+        <th>Địa chỉ</th>
+    </tr>
+    {% for c in patients %}
+    <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.sex }}</td>
+        <td>{{ c.dateofbirth }}</td>
+        <td>{{ c.address }}</td>
+
+        <td>
+            <input type="button" value="Lập phiếu khám" onclick="" class="btn btn-success"/>
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

@@ -8,6 +8,10 @@ from sqlalchemy import or_
 import hashlib  # để băm
 
 
+
+def load_medicalist():
+    return MedicaList.query.all()
+
 def check_login(username, password):
     if username and password:
         password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
@@ -51,23 +55,21 @@ def create_medicalist(name):  # tao danh sach kham
     db.session.commit()
 
 
-def get_medicalist_by_date(date):
-    m = MedicaList.query.filter_by(name=date).first()
-    return m.id
-
 
 def add_patient_medicalist(date, patient_id):
     pm = Patient_MedicaList(patient_id=patient_id, medicalist_id=get_medicalist_by_date(date))
     db.session.add(pm)
     db.session.commit()
 
-
+def get_medicalist_by_date(date):
+    m = MedicaList.query.filter_by(name=date).first()
+    return m.id
 def load_patient(date=None):
     query = Patient.query
     if date:
-        medicalist_id = get_medicalist_by_date(date)
+       # medicalist_id = get_medicalist_by_date(date)
         query = query.join(Patient_MedicaList, Patient.id == Patient_MedicaList.patient_id).filter(
-            Patient_MedicaList.medicalist_id == medicalist_id).all()
+            Patient_MedicaList.medicalist_id == date).all()
 
     return query
 
@@ -75,3 +77,11 @@ def load_patient(date=None):
 def get_patient_by_identityycard(identitycard):
     p = Patient.query.filter_by(identitycard='identitycard').first()
     return p
+
+
+def get_date_now():# lay id ngay hien tai
+    date =datetime(2022,1,30).date().today()
+    m = MedicaList.query.filter_by(name=date).first()
+    return m.id
+
+
