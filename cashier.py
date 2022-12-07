@@ -1,4 +1,4 @@
-from pyweb.models import User, Category, Medicine, UserRole
+from pyweb.models import User,Patient,Medicine
 from pyweb import db, app
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
@@ -6,7 +6,7 @@ from flask_login import current_user
 from flask_login import logout_user
 from flask import redirect
 
-admin = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4')
+cashier = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4')
 
 
 
@@ -17,7 +17,7 @@ class AuthenticatedBaseView(BaseView):
 
 class AuthenticatedModelView(ModelView):
     def is_accessible(self):
-        return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
+        return current_user.is_authenticated and current_user.user_role == UserRole.THUNGAN
 
 
 
@@ -25,7 +25,7 @@ class LogoutView(AuthenticatedBaseView):
     @expose('/')
     def index(self):
         logout_user()
-        return redirect('/admin')
+        return redirect('/cashier')
 
 
 class MedicineView(AuthenticatedModelView):
@@ -50,17 +50,19 @@ class MedicineView(AuthenticatedModelView):
 class StatsView(AuthenticatedBaseView):
     @expose('/')
     def index(self):
-        return self.render('admin/stats.html')
-
+        return self.render('cashier/stats.html')
 
 class UserView(AuthenticatedBaseView):
     @expose('/')
     def index(self):
-        return self.render('admin/listuser.html')
+        return self.render('cashier/taohoadon.html')
 
 
-admin.add_view(AuthenticatedModelView(Category, db.session, name=" Danh Sach Loai thuoc"))
-admin.add_view(MedicineView(Medicine, db.session, name="Danh Sach Thuoc"))
-admin.add_view(AuthenticatedModelView(User, db.session, name='danh sách user'))
+# admin.add_view(AuthenticatedModelView(Category, db.session, name=" Danh Sach Loai thuoc"))
+# admin.add_view(MedicineView(Medicine, db.session, name="Danh Sach Thuoc"))
+# admin.add_view(AuthenticatedModelView(User, db.session, name='danh sách user'))
+# admin.add_view(StatsView(name='Thông kê'))
+# admin.add_view(LogoutView(name='Đăng xuất'))
+
 admin.add_view(StatsView(name='Thông kê'))
 admin.add_view(LogoutView(name='Đăng xuất'))

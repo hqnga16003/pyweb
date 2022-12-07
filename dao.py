@@ -36,6 +36,7 @@ def add_user(username, password, **kwargs):
     db.session.commit()
 
 
+#thêm benh nhan
 def add_patient(name, sex, dateofbirth, address, phonenumber, identitycard):
     patient = Patient.query.filter_by(identitycard=identitycard).first()
 
@@ -55,15 +56,17 @@ def create_medicalist(name):  # tao danh sach kham
     db.session.commit()
 
 
-
+#thêm bệnh nhân-bac si
 def add_patient_medicalist(date, patient_id):
     pm = Patient_MedicaList(patient_id=patient_id, medicalist_id=get_medicalist_by_date(date))
     db.session.add(pm)
     db.session.commit()
 
+#lấy ds kham theo ngay
 def get_medicalist_by_date(date):
     m = MedicaList.query.filter_by(name=date).first()
     return m.id
+
 def load_patient(date=None):
     query = Patient.query
     if date:
@@ -73,7 +76,7 @@ def load_patient(date=None):
 
     return query
 
-
+#lay benh nhan theo cccd
 def get_patient_by_identityycard(identitycard):
     p = Patient.query.filter_by(identitycard='identitycard').first()
     return p

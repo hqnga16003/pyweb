@@ -112,6 +112,14 @@ def login_admin():
         login_user(user=user)
     return redirect('/admin')
 
+@app.route('/login-cashier', methods=['post'])
+def login_cashier():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user = dao.check_login(username=username, password=password)
+    if user and user.user_role == UserRole.THUNGAN:
+        login_user(user=user)
+    return redirect('/cashier')
 
 @app.route("/logout")
 def logout_my_user():
