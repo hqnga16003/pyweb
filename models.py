@@ -175,10 +175,10 @@ if __name__ == '__main__':
         # db.session.add(dskham)
         # db.session.commit()
 
-        # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
-        # u = User(username='yta', password=password, user_role=UserRole.YTA, email="admin@gmail.com")
-        # db.session.add(u)
-        # db.session.commit()
+        password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
+        u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
+        db.session.add(u)
+        db.session.commit()
 
         # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
         # db.session.add(info)
