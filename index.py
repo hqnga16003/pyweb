@@ -23,24 +23,6 @@ def lapphieukham():
     return render_template('lapphieukham.html',patients=patients)
 
 
-@app.route("/xemdanhsachkham", methods=['get', 'post'])
-def xemdanhsachkham():
-    medicalists = dao.load_medicalist()
-    medi_id = request.args.get('medicalist_id')
-    patients = dao.load_patient(medi_id)
-
-    # medicalists = request.args.get('date')
-    # patients = dao.load_patient(medicalists)
-    return render_template('xemdanhsachkham.html', medicalists=medicalists, patients=patients)
-
-
-@app.route("/taodskham", methods=['get', 'post'])
-def taodskham():
-    if request.method.__eq__('POST'):
-        dao.create_medicalist(name=request.form.get('medicalexaminationday'))
-
-    return render_template('taodskham.html')
-
 
 @app.route("/dsbs")
 def dsbs():
@@ -137,15 +119,8 @@ def load_user(user_id):
     return dao.get_user_by_id(user_id)
 
 
-def send_sms():
-    client = Client(keys.account_sid, keys.auth_token)
-    sms = client.messages.create(
-        body="alo",
-        from_=keys.twilio_number,
-        to=keys.my_phone_number
-    )
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-    send_sms()
+

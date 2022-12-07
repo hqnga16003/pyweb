@@ -1,24 +1,22 @@
 from pyweb.models import User, Category, Medicine, UserRole
-from pyweb import db, app
+from pyweb import db, app, dao
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from flask_login import logout_user
-from flask import redirect
+from flask import redirect, request, render_template
 
 admin = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4')
 
 
-
 class AuthenticatedBaseView(BaseView):
-     def is_visible(self):
-            return current_user.is_authenticated
+    def is_visible(self):
+        return current_user.is_authenticated
 
 
 class AuthenticatedModelView(ModelView):
     def is_accessible(self):
         return current_user.is_authenticated and current_user.user_role == UserRole.ADMIN
-
 
 
 class LogoutView(AuthenticatedBaseView):
@@ -53,14 +51,27 @@ class StatsView(AuthenticatedBaseView):
         return self.render('admin/stats.html')
 
 
-class UserView(AuthenticatedBaseView):
-    @expose('/')
+class TaoDanhSachKham(AuthenticatedBaseView):
+    @expose('/', methods=['get', 'post'])
     def index(self):
-        return self.render('admin/listuser.html')
+        if request.method.__eq__('POST'):
+            dao.create_medicalist(name=request.form.get('medicalexaminationday'))
+        return self.render('admin/taodanhsachkham.html')
+
+
+class XemDanhSachKham(AuthenticatedBaseView):
+    @expose('/', methods=['get', 'post'])
+    def index(self):
+        medicalists = dao.load_medicalist()
+        medi_id = request.args.get('medicalist_id')
+        patients = dao.load_patient(medi_id)
+        return self.render('admin/xemdanhsachkham.html',medicalists = medicalists,patients=patients)
 
 
 admin.add_view(AuthenticatedModelView(Category, db.session, name=" Danh Sach Loai thuoc"))
 admin.add_view(MedicineView(Medicine, db.session, name="Danh Sach Thuoc"))
-admin.add_view(AuthenticatedModelView(User, db.session, name='danh sách user'))
-admin.add_view(StatsView(name='Thông kê'))
+
+admin.add_view(TaoDanhSachKham(name="Tạo danh sách khám"))
+admin.add_view(XemDanhSachKham(name="Xem danh sách khám"))
+
 admin.add_view(LogoutView(name='Đăng xuất'))
