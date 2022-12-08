@@ -170,17 +170,17 @@ if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-        # db.create_all()
+      #  db.create_all()
 
 
         # dskham = MedicaList(name="danh sach 2", nurse_id=1)
         # db.session.add(dskham)
         # db.session.commit()
 
-        password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
-        u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
-        db.session.add(u)
-        db.session.commit()
+        # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
+        # u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
+        # db.session.add(u)
+        # db.session.commit()
 
         # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
         # db.session.add(info)

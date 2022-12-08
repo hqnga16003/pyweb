@@ -17,10 +17,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/lapphieukham")
-def lapphieukham():
-    patients = dao.load_patient(dao.get_date_now())
-    return render_template('lapphieukham.html',patients=patients)
+
 
 
 
