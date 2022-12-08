@@ -2,7 +2,11 @@
 
 {% block body %}
 
-<table class="table">
+
+
+
+<form method="post" action="">
+    <table class="table">
     <tr>
         <th>STT</th>
         <th>Họ tên</th>
@@ -19,12 +23,18 @@
         <td>{{ c.address }}</td>
 
         <td>
-            <input type="button" value="Lập phiếu khám" onclick="" class="btn btn-success"/>
+            <a href="/admin/phieukham/?patient_medicalist_id={{medi_id}}" class="btn btn-primary"> Lập phiếu khám</a>
         </td>
+
+<!--         <div class="form-outline datepicker">-->
+<!--            <input type="date" class="form-control" id="medicalexaminationday" name="medicalexaminationday"/>-->
+<!--            <label for="medicalexaminationday" class="form-label">Chọn ngày tạo</label>-->
+<!--        </div>-->
+
 
     </tr>
     {% endfor %}
 </table>
-
+</form>
 
 {% endblock %}

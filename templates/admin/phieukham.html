@@ -1,6 +1,58 @@
 {% extends 'admin/master.html' %}
 
 
-<h1>Phiếu khám</h1>
 {% block body %}
+
+
+<ul class="nav">
+    {% for m in p %}
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/phieukham/?patient_medica_list_id={{m.id}}">{{m.name}}</a>
+    </li>
+    {%endfor%}
+</ul>
+
+
+<form method="post" action="">
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" required id="trieuchung" placeholder="Triệu chứng" name="trieuchung">
+        <label for="trieuchung">Triệu chứng</label>
+    </div>
+
+    <div class="form-floating mb-3 mt-3">
+        <input type="text" class="form-control" required id="dudoanbenh" placeholder="Dự đoán bệnh" name="dudoanbenh">
+        <label for="dudoanbenh">Dự đoán bệnh</label>
+    </div>
+
+    <h1>Phiếu khám</h1>
+    <table class="table">
+        <tr>
+            <th>STT</th>
+            <th>Thuốc</th>
+            <th>Đơn vị</th>
+            <th>Số lượng</th>
+            <th>Cách dùng</th>
+            <th></th>
+        </tr>
+
+        <tr>
+            <td>1</td>
+            <td>thuoc 1</td>
+            <td>don vi 1</td>
+            <td>1</td>
+            <td>uong 5 vien</td>
+        </tr>
+
+    </table>
+
+    <div>
+        <input type="submit" value="Hoàn tất" class="btn btn-danger">
+    </div>
+
+
+</form>
+
+
+
 {% endblock %}

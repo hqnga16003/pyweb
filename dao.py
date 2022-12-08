@@ -2,7 +2,7 @@ from datetime import datetime
 
 from flask_login import current_user
 
-from pyweb.models import User, Patient, MedicaList, Patient_MedicaList,Category,Medicine
+from pyweb.models import User, Patient, MedicaList, Patient_MedicaList, Category, Medicine, MedicalReport
 from pyweb import db
 from sqlalchemy import or_
 import hashlib  # để băm
@@ -11,8 +11,10 @@ import hashlib  # để băm
 def load_medicalist():
     return MedicaList.query.all()
 
+
 def load_categories():
     return Category.query.all()
+
 
 def load_medicines(cate_id=None, kw=None):
     query = Medicine.query
@@ -24,6 +26,12 @@ def load_medicines(cate_id=None, kw=None):
         query = query.filter(Medicine.name.contains(kw))
 
     return query.all()
+
+
+def load_medical_report(medicalist_id):
+    query = MedicalReport.query
+    query = query.filter(MedicalReport.id.__eq__(medicalist_id))
+
 
 def check_login(username, password):
     if username and password:
@@ -82,15 +90,6 @@ def get_medicalist_by_date(date):
     return m.id
 
 
-def load_patient(date=None):
-    query = Patient.query
-    if date:
-        query = query.join(Patient_MedicaList, Patient.id == Patient_MedicaList.patient_id).filter(
-            Patient_MedicaList.medicalist_id == date).all()
-
-    return query
-
-
 # lay benh nhan theo cccd
 def get_patient_by_identityycard(identitycard):
     p = Patient.query.filter_by(identitycard='identitycard').first()
@@ -102,8 +101,47 @@ def get_date_now():  # lay id ngay hien tai
     m = MedicaList.query.filter_by(name=date).first()
     return m.id
 
+
+def create_medical_report(patient_medicalist_id):
+    # m = MedicalReport(symptom=symptom, diseaseprediction=diseaseprediction, doctor_id=current_user.id,
+    #                   patient_medicalist_id=patient_medicalist_id)
+    # db.session.add(m)
+    # db.session.commit()
+
+    m = MedicalReport(doctor_id=current_user.id,
+                      patient_medicalist_id=patient_medicalist_id)
+    db.session.add(m)
+    db.session.commit()
+
+
+def get_id_patient_medica_list():  # lay id ngay hien tai
+    date = get_date_now()
+    m = Patient_MedicaList.query.filter_by(medicalist_id=date).all()
+    return m
+
+
+def lay_ten_benh_nhan(danhsachkham_benhnhan_id):
+    query = Patient.query.join(Patient_MedicaList, Patient.id == Patient_MedicaList.patient_id).filter(
+        Patient_MedicaList.id == danhsachkham_benhnhan_id).first()
+    return query.name
+
+
+def load_patient(date=None, patient_medicaList_id=None):
+    query = Patient.query
+    if date:
+        query = query.join(Patient_MedicaList, Patient.id == Patient_MedicaList.patient_id).filter(
+            Patient_MedicaList.medicalist_id == date).all()
+
+    if patient_medicaList_id:
+        query = query.join(Patient_MedicaList, Patient.id == Patient_MedicaList.patient_id).filter(
+            Patient_MedicaList.medicalist_id == patient_medicaList_id).all()
+    return query
+
+
+# query = query.join(Patient_MedicaList, Patient.id == Patient_MedicaList.patient_id).filter(
+#            Patient_MedicaList.medicalist_id == date).all()
 if __name__ == '__main__':
     from pyweb import app
-    with app.app_context():
-        print(load_medicines())
 
+    with app.app_context():
+        print(load_patient(patient_medicaList_id=1))

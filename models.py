@@ -39,7 +39,6 @@ class User(BaseModel, UserMixin):
     userinfo = relationship("UserInfo", uselist=False, backref="user")
 
 
-
 class UserInfo(BaseModel):
     lastname = Column(String(50), nullable=False)
     firstname = Column(String(50), nullable=False)
@@ -51,14 +50,13 @@ class UserInfo(BaseModel):
     user_id = Column(Integer, ForeignKey(User.id), unique=True)
 
 
-
 class Patient(BaseModel):  # benh nhan
     name = Column(String(50), nullable=False)
     sex = Column(String(50))
     dateofbirth = Column(DateTime)
     address = Column(String(50))
     phonenumber = Column(String(50))
-    identitycard= Column(String(50),unique = True)
+    identitycard = Column(String(50), unique=True)
     patienthistory = relationship('PatientHistory', backref='patienthistory', uselist=False)
     receipt = relationship('Receipt', backref='patient', lazy=True)
 
@@ -67,18 +65,19 @@ class PatientHistory(BaseModel):  # lich su benh nhan
     kindofdisease = Column(String(100))
     patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False, unique=True)
 
-class PatientRegulations(BaseModel): # quy dinh so benh nhan
+
+class PatientRegulations(BaseModel):  # quy dinh so benh nhan
     amount = Column(Integer, default=40)
     startday = Column(DateTime)
     endday = Column(DateTime)
     admin_id = Column(Integer, ForeignKey(User.id), nullable=False)
     medicalist = relationship('MedicaList', backref='patientregulations', lazy=True)
 
-class MedicaList(BaseModel):  # danh sach kham
-    name = Column((DateTime), nullable=False,unique = True)
-    nurse_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    patientregulations_id = Column(Integer, ForeignKey(PatientRegulations.id)) #, nullable=False
 
+class MedicaList(BaseModel):  # danh sach kham
+    name = Column((DateTime), nullable=False, unique=True)
+    nurse_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    patientregulations_id = Column(Integer, ForeignKey(PatientRegulations.id))  # , nullable=False
 
 
 class Patient_MedicaList(BaseModel):  # benh nhan_ danh sach benh nhan
@@ -107,10 +106,8 @@ class Unit(BaseModel):
     name = Column(String(50), nullable=False, unique=True)
     medicines = relationship('Medicine', backref='unit', lazy=True)
 
-
     def __str__(self):
         return self.name
-
 
 
 class Medicine(BaseModel):
@@ -125,20 +122,18 @@ class Medicine(BaseModel):
     unit_id = Column(Integer, ForeignKey(Unit.id), nullable=False)
 
     detail_medical_report = relationship('DetailMedicalReport', backref='medicine', lazy=True)
+
     def __str__(self):
         return self.name
 
 
-
-
-
-
-class RegulationsMedicalExpenses(BaseModel): # quy dinh tien kham benh
+class RegulationsMedicalExpenses(BaseModel):  # quy dinh tien kham benh
     medicalexpenses = Column(Integer, default=100000)
     startday = Column(DateTime)
     endday = Column(DateTime)
     admin_id = Column(Integer, ForeignKey(User.id), nullable=False)
     receipt = relationship('Receipt', backref='regulationsmedicalexpenses', lazy=True)
+
 
 class Receipt(BaseModel):  # hoa don
     medicinecash = Column(Integer)
@@ -158,37 +153,28 @@ class DetailMedicalReport(BaseModel):  # chi tiet phieu kham
     receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
 
 
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-      #  db.create_all()
+    #  db.create_all()
 
+    # dskham = MedicaList(name="danh sach 2", nurse_id=1)
+    # db.session.add(dskham)
+    # db.session.commit()
 
-        # dskham = MedicaList(name="danh sach 2", nurse_id=1)
-        # db.session.add(dskham)
-        # db.session.commit()
+    # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
+    # u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
+    # db.session.add(u)
+    # db.session.commit()
 
-        # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
-        # u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
-        # db.session.add(u)
-        # db.session.commit()
+    # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
+    # db.session.add(info)
+    # db.session.commit()
 
-        # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
-        # db.session.add(info)
-        # db.session.commit()
-
-        # yta = Nurse(user_id = 2)
-        # db.session.add(yta)
-        # db.session.commit()
+    # yta = Nurse(user_id = 2)
+    # db.session.add(yta)
+    # db.session.commit()
 
     # c1 = Category(name='Đau dạ dày')
     # c2 = Category(name='Giảm sốt')

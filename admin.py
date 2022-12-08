@@ -65,17 +65,42 @@ class XemDanhSachKham(AuthenticatedBaseView):
         medicalists = dao.load_medicalist()
         medi_id = request.args.get('medicalist_id')
         patients = dao.load_patient(medi_id)
-        return self.render('admin/xemdanhsachkham.html',medicalists = medicalists,patients=patients)
+        return self.render('admin/xemdanhsachkham.html', medicalists=medicalists, patients=patients)
+
 
 class LapPhieuKham(AuthenticatedBaseView):
     @expose('/')
     def __index__(self):
-        patients = dao.load_patient(dao.get_date_now())
-        return self.render('admin/lapphieukham.html',patients=patients)
+        medi_id = dao.get_date_now()
+        patients = dao.load_patient(medi_id)
 
+        # if request.method.__eq__('POST'):
+        #     dao.create_medical_report(patient_medicalist_id=request.form.get('patient_medicalist_id'))
+        return self.render('admin/lapphieukham.html', patients=patients, medi_id=medi_id)
+
+    # @expose('/')
+    # def lap_phieu_kham(self):
+    #     return self.render('admin/lapphieukham.html')
+
+
+class PhieuKham(AuthenticatedBaseView):
     @expose('/')
-    def lap_phieu_kham(self):
-        return self.render('admin/lapphieukham.html')
+    def __index__(self):
+        # patient_medica_list_id = request.args.get('patient_medica_list_id')
+        # if patient_medica_list_id:
+        #     dao.create_medical_report(patient_medicalist_id=patient_medica_list_id)
+
+        p = dao.load_patient(patient_medicaList_id=dao.get_date_now())
+        # name_patients = dao.lay_ten_benh_nhan()
+        return self.render('admin/phieukham.html', p=p)
+
+
+class Medicines(AuthenticatedBaseView):
+    @expose('/')
+    def __index__(self):
+        medicines = dao.load_medicines()
+
+        return self.render('admin/medicine.html',medicines=medicines )
 
 
 admin.add_view(AuthenticatedModelView(Category, db.session, name=" Danh Sach Loai thuoc"))
@@ -85,6 +110,7 @@ admin.add_view(MedicineView(Medicine, db.session, name="Danh Sach Thuoc"))
 
 admin.add_view(TaoDanhSachKham(name="Tạo danh sách khám"))
 admin.add_view(XemDanhSachKham(name="Xem danh sách khám"))
-admin.add_view(LapPhieuKham(name="Lập phiếu khám"))
+admin.add_view(PhieuKham(name="Phiếu khám"))
+admin.add_view(Medicines(name="Danh sách thuốc"))
 
 admin.add_view(LogoutView(name='Đăng xuất'))
