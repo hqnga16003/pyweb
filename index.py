@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from flask import session
 from pyweb import app, dao, admin, login
 from flask_login import login_user, logout_user
@@ -17,8 +17,33 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/taodanhsachkham', methods=['get', 'post'])
+def tdsk():
+    if request.method.__eq__('POST'):
+        dao.create_medicalist(name=request.form.get('medicalexaminationday'))
+    return render_template('taodanhsachkham.html')
 
 
+@app.route("/xemdanhsachkham", methods=['get', 'post'])
+def xemdanhsachkham():
+    medicalists = dao.load_medicalist()
+    medi_id = request.args.get('medicalist_id')
+    patients = dao.load_patient(medi_id)
+
+    return render_template('xemdanhsachkham.html', medicalists=medicalists, patients=patients)
+
+
+@app.route('/phieukham', methods=['get', 'post'])
+def phieukham():
+    medicines = dao.load_medicines()
+    p = dao.load_patient_in_patient_medicaList()
+    patient_medicalist_id = request.args.get('patient_medicalist_id')
+    if request.method.__eq__('POST'):
+        dao.create_medical_report(symptom=request.form.get('trieuchung'),
+                                  diseaseprediction=request.form.get('dudoanbenh'),
+                                  patient_medicalist_id=patient_medicalist_id)
+
+    return render_template('phieukham.html', p=p, medicines=medicines)
 
 
 @app.route("/dsbs")
@@ -91,6 +116,7 @@ def login_admin():
         login_user(user=user)
     return redirect('/admin')
 
+
 @app.route('/login-cashier', methods=['post'])
 def login_cashier():
     username = request.form.get('username')
@@ -99,6 +125,7 @@ def login_cashier():
     if user and user.user_role == UserRole.THUNGAN:
         login_user(user=user)
     return redirect('/cashier')
+
 
 @app.route("/logout")
 def logout_my_user():
@@ -116,8 +143,33 @@ def load_user(user_id):
     return dao.get_user_by_id(user_id)
 
 
+@app.route('/api/add-medicine', methods=['post'])
+def add_medicine_to_medical_report():
+    data = request.json
+    id = str(data.get('id'))
+    name = data.get('name')
+    unit = data.get('unit')
+    price = data.get('price')
+
+    medical_report = session.get('medical_report')
+    if not medical_report:
+        medical_report = {}
+
+    if id in medical_report:
+        quantity = medical_report[id]['quantity'] = quantity = medical_report[id]['quantity'] + 1
+    else:
+        medical_report[id] = {
+            'id': id,
+            'name': name,
+            'unit': unit,
+            'quantity': 1,
+            'price': price
+
+        }
+
+    session['medical_report'] = medical_report
+    return jsonify(dao.count(medical_report))
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-

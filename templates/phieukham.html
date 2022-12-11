@@ -1,19 +1,21 @@
-{% extends 'admin/master.html' %}
-
-
-{% block body %}
+{% extends 'layout/base.html' %}
+{% block content %}
 
 
 <ul class="nav">
     {% for m in p %}
     <li class="nav-item">
-        <a class="nav-link" href="/admin/phieukham/?patient_medica_list_id={{m.id}}">{{m.name}}</a>
+        <a class="nav-link" href="{{url_for('phieukham',patient_medicalist_id = m.id)}}">{{m.name}}</a>
+
+
     </li>
     {%endfor%}
 </ul>
 
 
 <form method="post" action="">
+
+
 
     <div class="form-floating mb-3 mt-3">
         <input type="text" class="form-control" required id="trieuchung" placeholder="Triệu chứng" name="trieuchung">
@@ -24,6 +26,7 @@
         <input type="text" class="form-control" required id="dudoanbenh" placeholder="Dự đoán bệnh" name="dudoanbenh">
         <label for="dudoanbenh">Dự đoán bệnh</label>
     </div>
+
 
     <h1>Phiếu khám</h1>
     <table class="table">
@@ -36,13 +39,6 @@
             <th></th>
         </tr>
 
-        <tr>
-            <td>1</td>
-            <td>thuoc 1</td>
-            <td>don vi 1</td>
-            <td>1</td>
-            <td>uong 5 vien</td>
-        </tr>
 
     </table>
 
@@ -50,9 +46,30 @@
         <input type="submit" value="Hoàn tất" class="btn btn-danger">
     </div>
 
-
 </form>
 
+
+<h1>danh sach thuoc</h1>
+
+
+<div class="container">
+    <div class="row">
+        {% for m in medicines %}
+        <div class="col-md-3 col-sm-12" style="padding:1rem;">
+            <div class="card">
+                <img class="card-img-top" src="{{ m.image }}" alt="{{ m.name }}">
+                <div class="card-body">
+                    <h4 class="card-title">{{ m.name }}</h4>
+                    <p class="card-text">{{m.unit}}</p>
+                    <a href="" class="btn btn-primary">Xem chi tiết</a>
+                    <a href="" class="btn btn-primary" onclick="addMedicine({{m.id}},'{{m.name}}','{{m.unit}}',{{m.price}})">Thêmthuốc</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
 
 
 {% endblock %}
