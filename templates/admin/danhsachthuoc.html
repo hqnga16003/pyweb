@@ -1,0 +1,31 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        {% for m in medicines %}
+        <form action="" method="post">
+
+            <div class="col-md-3 col-sm-12" style="padding:1rem;">
+                <div class="card">
+                    <img class="card-img-top" src="{{ m.image }}" alt="{{ m.name }}">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ m.name }}</h4>
+                        <p class="card-text">{{m.unit}}</p>
+                        <input type="hidden" name="code" value="{{m.id}}">
+                        <input type="hidden" name="unit" value="{{m.unit}}">
+                        <input type="hidden" name="name" value="{{m.name}}">
+                        <input type="hidden" name="price" value="{{m.price}}">
+
+                        <input type="text" class="product-quantity" name=quantity value="1" size="2">
+                        <input type="submit" value="Thêm" class="default-btn">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

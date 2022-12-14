@@ -1,10 +1,9 @@
-{% extends 'layout/base.html' %}
-{% block content %}
+{% extends 'admin/master.html' %}
+
+{% block body %}
 
 
-
-
-<form method="post" action="">
+<form method="post" action="" >
 
 
     <div class="form-floating mb-3 mt-3">
@@ -28,6 +27,7 @@
             <th>Thuốc</th>
             <th>Đơn vị</th>
             <th>Số lượng</th>
+            <th>Gía bán</th>
             <th>Cách dùng</th>
             <th></th>
         </tr>
@@ -38,10 +38,11 @@
             <td>{{c.name}}</td>
             <td>{{c.unit}}</td>
             <td>{{c.quantity}}</td>
+             <td>{{c.price}}</td>
+            <td><input type="text" name = use></td>
         </tr>
         {%endfor%}
         {% else%}
-        <h1>khong co thuoc</h1>
         {%endif%}
 
     </table>
@@ -53,7 +54,9 @@
 </form>
 
 
-<h1>danh sach thuoc</h1>
+
+
+
 
 
 

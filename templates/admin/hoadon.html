@@ -1,0 +1,27 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<table class="table">
+    <tr>
+        <th>Họ tên</th>
+        <th>Ngày khám</th>
+        <th>Tiền khám</th>
+        <th>Tiền thuốc</th>
+        <th>Tổng tiền</th>
+
+
+    </tr>
+    {% for m in p %}
+    <tr>
+        <td>{{m.name}}</td>
+        <td>{{date}}</td>
+        <td>100000VND</td>
+        <td>rong</td>
+        <td>rong</td>
+        <td><a class="nav-link" href="/admin/hoadon/?patient_medicalist_id={{m.id}}">Thanh toán</a></td>
+    </tr>
+    {%endfor%}
+
+
+</table>
+{% endblock %}

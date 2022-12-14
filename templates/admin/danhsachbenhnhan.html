@@ -1,0 +1,21 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<table class="table">
+    <tr>
+        <th>Họ tên</th>
+        <th>Hồ sơ khám</th>
+        <th>Lập phiếu khám</th>
+    </tr>
+    {% for m in p %}
+    <tr>
+        <td>{{m.name}}</td>
+        <td><a class="nav-link" href="">Xem hồ sơ khám</a></td>
+        <td><a class="nav-link" href="/admin/phieukham/?patient_medicalist_id={{m.id}}">Lập phiếu khám</a></td>
+    </tr>
+    {%endfor%}
+
+
+</table>
+{% endblock %}
+

@@ -58,7 +58,6 @@ class Patient(BaseModel):  # benh nhan
     phonenumber = Column(String(50))
     identitycard = Column(String(50), unique=True)
     patienthistory = relationship('PatientHistory', backref='patienthistory', uselist=False)
-    receipt = relationship('Receipt', backref='patient', lazy=True)
 
 
 class PatientHistory(BaseModel):  # lich su benh nhan
@@ -84,6 +83,7 @@ class Patient_MedicaList(BaseModel):  # benh nhan_ danh sach benh nhan
     patient_id = Column(ForeignKey(Patient.id), primary_key=True)
     medicalist_id = Column(ForeignKey(MedicaList.id), primary_key=True)
     medicalreport = relationship('MedicalReport', backref='medicalreport', uselist=False)
+
 
 
 class MedicalReport(BaseModel):  # phieu kham
@@ -115,8 +115,6 @@ class Medicine(BaseModel):
     describe = Column(Text)
     price = Column(Float, default=0)
     image = Column(String(100))
-    dateofmanufacture = Column(DateTime)
-    expirydate = Column(DateTime)
     active = Column(Boolean, default=True)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
     unit_id = Column(Integer, ForeignKey(Unit.id), nullable=False)
@@ -136,12 +134,12 @@ class RegulationsMedicalExpenses(BaseModel):  # quy dinh tien kham benh
 
 
 class Receipt(BaseModel):  # hoa don
-    medicinecash = Column(Integer)
+
     datecreated = Column(DateTime)
-    patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
     detailmedicalreports = relationship('DetailMedicalReport', backref='receipt', lazy=True)
     cashier_id = Column(Integer, ForeignKey(User.id), nullable=False)
-    regulationsmedicalexpenses_id = Column(Integer, ForeignKey(RegulationsMedicalExpenses.id), nullable=False)
+    regulationsmedicalexpenses_id = Column(Integer, ForeignKey(RegulationsMedicalExpenses.id))
+
 
 
 class DetailMedicalReport(BaseModel):  # chi tiet phieu kham
@@ -157,7 +155,7 @@ if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-       # db.create_all()
+        #db.create_all()
 
     # dskham = MedicaList(name="danh sach 2", nurse_id=1)
     # db.session.add(dskham)
