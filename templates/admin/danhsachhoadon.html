@@ -3,23 +3,22 @@
 {% block body %}
 <table class="table">
     <tr>
-        <th>Ngày khám</th>
+        <th>Họ tên</th>
         <th>Tiền khám</th>
         <th>Tiền thuốc</th>
         <th>Tổng tiền</th>
 
     </tr>
-
+    {% for m in p %}
     <tr>
-        <td>{{date}}</td>
-        <td></td>
-        <td></td>
-        <td>}</td>
-
+        <td>{{m[1]}}</td>
+        <td>{{m[3]}}</td>
+        <td>{{m[2]}}</td>
+        <th>{{m[3]+m[2]}}</th>
 
 
     </tr>
+    {% endfor %}
 
 
-</table>
-{% endblock %}
+    {% endblock %}

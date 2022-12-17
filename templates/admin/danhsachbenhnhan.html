@@ -10,8 +10,8 @@
     {% for m in p %}
     <tr>
         <td>{{m.name}}</td>
-        <td><a class="nav-link" href="">Xem hồ sơ khám</a></td>
-        <td><a class="nav-link" href="/admin/phieukham/?patient_medicalist_id={{m.id}}">Lập phiếu khám</a></td>
+        <td><a class="nav-link" href="/admin/hosobenhnhan/?patient_id={{m[1]}}">Xem hồ sơ khám</a></td>
+        <td><a class="nav-link" href="/admin/phieukham/?patient_medicalist_id={{m[0]}}&patient_id={{m[1]}}">Lập phiếu khám</a></td>
     </tr>
     {%endfor%}
 

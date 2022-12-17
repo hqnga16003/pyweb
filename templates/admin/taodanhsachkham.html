@@ -2,6 +2,12 @@
 
 {% block body %}
 <h1>Tạo ngày khám </h1>
+
+{% if mes %}
+<div class="alert alert-danger">
+    {{mes}}
+</div>
+{% endif %}
 <form method="post" action="">
     <div class="col-md-4 mb-4">
 

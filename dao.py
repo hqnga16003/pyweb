@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_login import current_user
 
 from pyweb.models import User, Patient, MedicaList, Patient_MedicaList, Category, Medicine, MedicalReport, Unit, \
-    Receipt, DetailMedicalReport
+    Receipt, DetailMedicalReport, PatientHistory
 from pyweb import db
 from sqlalchemy import or_, func
 import hashlib  # để băm
@@ -128,11 +128,12 @@ def load_medicines(cate_id=None, kw=None):
 def load_patient_in_patient_medicaList():
     date_id = get_date_now()
 
-    query = db.session.query(Patient_MedicaList.id, Patient.name).join(Patient,
-                                                                       Patient.id == Patient_MedicaList.patient_id) \
+    query = db.session.query(Patient_MedicaList.id, Patient.id, Patient.name).join(Patient,
+                                                                                   Patient.id == Patient_MedicaList.patient_id) \
         .filter(Patient_MedicaList.medicalist_id == date_id).all()
 
-    # query = query.group_by(Patient_MedicaList.id, Patient.name).all()
+    # query = db.session.query(Patient_MedicaList.id,Patient.id,Patient.name).join(Patient.id==Patient_MedicaList.patient_id)\
+    #     .filter(Patient_MedicaList.medicalist_id == date_id).all()
 
     return query
 
@@ -144,18 +145,17 @@ def create_medical_report(symptom, diseaseprediction, patient_medicalist_id):
     db.session.commit()
 
 
-def save_DetailMedicalReport(medical_report, medicalreport_id):
+def save_DetailMedicalReport(medical_report, medicalreport_id,patient_id):
+    # r = Receipt(cashier_id=current_user.id, patient_id=patient_id)
+    # db.session.add(r)
+    # db.session.commit()
     if medical_report:
-        r = Receipt(cashier_id=current_user.id)
-        db.session.add(r)
-        db.session.commit()
-
-
         for c in medical_report.values():
             d = DetailMedicalReport(quantity=c['quantity'], unitprice=c['price']
                                     , medicalreport_id=medicalreport_id, medicine_id=c['id']
-                                    , receipt_id=r.id)
+                                    )
             db.session.add(d)
+
 
         db.session.commit()
 
@@ -165,23 +165,83 @@ def lay_id_phieukham_by_id_benhnhan_dskham(patient_medicalist_id):
     return id.id
 
 
-def tinh_tien(medicalreport_id):
-    query = db.session.query(MedicalReport.id,Patient.name,func.sum(DetailMedicalReport.unitprice * DetailMedicalReport.quantity)) \
-       .join() .filter(DetailMedicalReport.medicalreport_id == medicalreport_id).first()
 
 
-    return query
 
-
-def tao_hoa_don(medicalreport_id):
-    r = Receipt(medicinecash=tinh_tien(medicalreport_id),datecreated=datetime.today(), cashier_id=1)
+def tao_hoa_don(medicalreport_id,patient_id,medicinecash=0,medicalcash=100000):
+    r = Receipt(medicalreport_id = medicalreport_id,medicinecash=medicinecash,medicalcash=medicalcash,cashier_id = current_user.id,patient_id=patient_id)
     db.session.add(r)
     db.session.commit()
 
 
+def kiem_tra_danh_sach_kham(date):
+    query = MedicaList.query.filter_by(name=date).first()
+    return query
+
+
+def tao_lich_su_benh_nhan(medicalreport_id, patient_id):
+    p = PatientHistory(medicalreport_id=medicalreport_id, patient_id=patient_id)
+    db.session.add(p)
+    db.session.commit()
+
+
+def load_lich_su_benh_nhan(benhnhan_id):
+    query = db.session.query(MedicalReport) \
+        .join(Patient_MedicaList, MedicalReport.patient_medicalist_id == Patient_MedicaList.id) \
+        .join(Patient, Patient_MedicaList.patient_id == benhnhan_id).all()
+
+    return query
+
+
+def load_hoa_don(patient_medicalist_id):
+    query = db.session.query(Patient.name,func.sum(DetailMedicalReport.unitprice*DetailMedicalReport.quantity))\
+        .join(MedicalReport,MedicalReport.patient_medicalist_id==patient_medicalist_id)\
+        .join(DetailMedicalReport,DetailMedicalReport.medicalreport_id==MedicalReport.id).first()
+    return  query
+
+
+
+def get_id_phieukham(patient_medicalist_id):
+    query = MedicalReport.query.filter(MedicalReport.patient_medicalist_id==patient_medicalist_id).first()
+    return query.id
+
+
+
+
+
+def thanhtoan(patient_medicalist_id,patient_id):
+    medicalreport_id =lay_id_phieukham_by_id_benhnhan_dskham(patient_medicalist_id)
+    tao_hoa_don(medicalreport_id,patient_id,medicinecash=tinh_tien(medicalreport_id))
+
+
+def tinh_tien(medicalreport_id):
+    query = db.session.query(
+                             func.sum(DetailMedicalReport.unitprice * DetailMedicalReport.quantity)) \
+        .filter(DetailMedicalReport.medicalreport_id == medicalreport_id).first()
+    return query
+
+def load_danh_sach_hoa_don():
+
+    # query = db.session.query(Patient_MedicaList.id, Patient.id, Patient.name,MedicalReport.id).join(Patient,
+    #                                                                                Patient.id == Patient_MedicaList.patient_id) \
+    #     .filter(Patient_MedicaList.id==MedicalReport.patient_medicalist_id).all()
+
+    date_id = get_date_now()
+
+    query = db.session.query(MedicalReport.id,Patient.name,Receipt.medicinecash,Receipt.medicalcash)\
+        .join(Patient_MedicaList,Patient_MedicaList.id==MedicalReport.patient_medicalist_id)\
+        .join(Patient,Patient.id==Patient_MedicaList.patient_id)\
+        .join(Receipt,Receipt.medicalreport_id==MedicalReport.id)\
+        .filter(Patient_MedicaList.medicalist_id==date_id).all()
+
+
+
+
+    return  query
 
 if __name__ == '__main__':
     from pyweb import app
 
     with app.app_context():
-        print(tinh_tien(3))
+
+        print(load_danh_sach_hoa_don())

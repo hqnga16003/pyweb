@@ -57,13 +57,8 @@ class Patient(BaseModel):  # benh nhan
     address = Column(String(50))
     phonenumber = Column(String(50))
     identitycard = Column(String(50), unique=True)
-    patienthistory = relationship('PatientHistory', backref='patienthistory', uselist=False)
-
-
-class PatientHistory(BaseModel):  # lich su benh nhan
-    kindofdisease = Column(String(100))
-    patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False, unique=True)
-
+    patienthistory = relationship('PatientHistory', backref='patient', lazy=True)
+    receipts = relationship('Receipt', backref='patient', lazy=True)
 
 class PatientRegulations(BaseModel):  # quy dinh so benh nhan
     amount = Column(Integer, default=40)
@@ -85,13 +80,20 @@ class Patient_MedicaList(BaseModel):  # benh nhan_ danh sach benh nhan
     medicalreport = relationship('MedicalReport', backref='medicalreport', uselist=False)
 
 
-
 class MedicalReport(BaseModel):  # phieu kham
     symptom = Column(String(50))
     diseaseprediction = Column(String(50))
     patient_medicalist_id = Column(ForeignKey(Patient_MedicaList.id), unique=True)
     doctor_id = Column(Integer, ForeignKey(User.id), nullable=False)
     details = relationship('DetailMedicalReport', backref='medicalreport', lazy=True)
+    receipt = relationship('Receipt', backref='receipt', uselist=False)
+
+    patienthistorys = relationship('PatientHistory', backref='medicalreport', uselist=False)
+
+
+class PatientHistory(BaseModel):  # lich su benh nhan
+    medicalreport_id = Column(Integer, ForeignKey(MedicalReport.id), nullable=False)
+    patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
 
 
 class Category(BaseModel):
@@ -136,9 +138,14 @@ class RegulationsMedicalExpenses(BaseModel):  # quy dinh tien kham benh
 class Receipt(BaseModel):  # hoa don
 
     datecreated = Column(DateTime)
-    detailmedicalreports = relationship('DetailMedicalReport', backref='receipt', lazy=True)
+    medicinecash = Column(Integer)
+    medicalcash = Column(Integer)
+    medicalreport_id = Column(ForeignKey(MedicalReport.id), unique=True)
+    # detailmedicalreports = relationship('DetailMedicalReport', backref='receipt', lazy=True)
     cashier_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
     regulationsmedicalexpenses_id = Column(Integer, ForeignKey(RegulationsMedicalExpenses.id))
+
 
 
 
@@ -148,7 +155,7 @@ class DetailMedicalReport(BaseModel):  # chi tiet phieu kham
     medicalreport_id = Column(Integer, ForeignKey(MedicalReport.id), nullable=False)
     medicine_id = Column(Integer, ForeignKey(Medicine.id), nullable=False)
     use = Column(String(100))
-    receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
+    # receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
 
 
 if __name__ == '__main__':
@@ -161,10 +168,10 @@ if __name__ == '__main__':
     # db.session.add(dskham)
     # db.session.commit()
 
-        # password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
-        # u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
-        # db.session.add(u)
-        # db.session.commit()
+        password = str(hashlib.md5('1'.encode('utf-8')).hexdigest())
+        u = User(username='admin', password=password, user_role=UserRole.ADMIN, email="admin@gmail.com")
+        db.session.add(u)
+        db.session.commit()
 
     # info = UserInfo(lastname='yta', firstname="yta", user_id=2)
     # db.session.add(info)
@@ -174,8 +181,7 @@ if __name__ == '__main__':
     # db.session.add(yta)
     # db.session.commit()
 
-    # c1 = Category(name='Đau dạ dày')
-    # c2 = Category(name='Giảm sốt')
-    # c3 = Category(name='Giảm đau bụng')
-    # db.session.add_all([c1, c2, c3])
+    # c1 = Category(name='Loại Thuốc 1')
+    # c2 = Category(name='Loại Thuốc 2')
+    # db.session.add_all([c1, c2])
     # db.session.commit()

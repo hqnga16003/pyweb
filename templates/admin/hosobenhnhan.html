@@ -1,0 +1,22 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+
+<h1>Hồ sơ bệnh nhân</h1>
+
+<table class="table">
+      <tr>
+        <th>ID phiếu khám</th>
+        <th>Triệu chứng</th>
+        <th>Dự đoán bệnh</th>
+    </tr>
+    {% for c in lichsu %}
+    <tr>
+        <td>{{c.id}}</td>
+        <td>{{c.symptom}}</td>
+        <td>{{c.diseaseprediction}}</td>
+
+    </tr>
+    {%endfor%}
+    </table>
+
+    {% endblock %}
