@@ -11,10 +11,8 @@
         <td>{{m.name}}</td>
         <td><a class="nav-link" href="">Xem hồ sơ khám</a></td>
         <td><a class="nav-link" href="{{url_for('phieukham',patient_medicalist_id = m.id)}}">Lập phiếu khám</a></td>
-
-
     </tr>
-    {%endfor%}
+    {% endfor %}
 
 
 </table>

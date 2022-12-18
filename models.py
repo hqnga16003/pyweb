@@ -26,7 +26,7 @@ class Sex(Sex):
 
 class BaseModel(db.Model):
     __abstract__ = True
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)  #id tự tăng
 
 
 class User(BaseModel, UserMixin):
