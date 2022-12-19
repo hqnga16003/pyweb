@@ -2,14 +2,13 @@ import datetime
 
 from pyweb.models import User, Category, Medicine, UserRole, Unit
 from pyweb import db, app, dao
-from flask_admin import Admin, BaseView, expose
+from flask_admin import Admin, BaseView, expose,AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from flask_login import logout_user
 from flask import redirect, request, render_template, session, jsonify, url_for
 from datetime import date
 
-admin = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4')
 
 
 class AuthenticatedBaseView(BaseView):
@@ -164,15 +163,7 @@ class HoSoBenhNhan(AuthenticatedBaseView):
         return self.render('admin/hosobenhnhan.html', lichsu=lichsu)
 
 
-# class HoaDon(AuthenticatedBaseView):
-#     @expose('/', methods=['get', 'post'])
-#     def __index__(self):
-#         date = datetime.date.today()
-#         patient_medicalist_id = request.args.get('patient_medicalist_id')
-#         patient_id = request.args.get('patient_id')
-#         mr = dao.lay_id_phieukham_by_id_benhnhan_dskham(patient_medicalist_id)
-#         dao.tao_hoa_don(mr,patient_id)
-#         return self.render('admin/hoadon.html', date=date)
+
 
 
 
@@ -182,6 +173,18 @@ class DanhSachHoaDon(AuthenticatedBaseView):
         p = dao.load_danh_sach_hoa_don()
 
         return self.render('admin/danhsachhoadon.html', p=p)
+
+
+
+class MyAdminView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        stats = dao.baocaodoanhthu()
+
+        return self.render('admin/index.html',stats=stats)
+
+
+admin = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4',index_view=MyAdminView())
 
 
 admin.add_view(AuthenticatedModelView(Category, db.session, name=" Danh Sach Loai thuoc"))

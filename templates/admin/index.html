@@ -4,6 +4,56 @@
 
 {% if current_user.is_authenticated %}
 <h3>Chào <span class="text-info">{{ current_user.username }}</span>!!!</h3>
+<div class="row">
+    <div class="col-md-5 col-sm-12 ">
+        <table class="table">
+            <tr>
+                <th>Ngày</th>
+                <th>Số lượng</th>
+                <th>Doanh Thu</th>
+            </tr>
+            {% for s in stats %}
+            <tr>
+                <td>{{s[0]}}</td>
+                <td>{{s[1]}}</td>
+                <td>{{s[2]}}</td>
+
+            </tr>
+            {% endfor%}
+        </table>
+        <form action="">
+            <div class="form-group">
+                <label>Filter by Month</label>
+                <input type="number" name="month" placeholder="Enter the month..." class="form-control">
+            </div>
+            <div>
+                <input type="submit" value="Filter" class="btn btn-info">
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-7 col-sm-12 ">
+        <canvas id="soLuong">
+
+        </canvas>
+    </div>
+
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/my-chart.js') }}"></script>
+<script>
+    let labels = []
+    let data = []
+    {% for s in stats %}
+    labels.push('{{s[0]}}')
+    data.push({{s[1]}})
+    {% endfor%}
+
+    window.onload = function(){
+        ve(labels,data)
+    }
+</script>
 {% else %}
 
 <h1 class="text-center text-danger">ĐĂNG NHẬP QUẢN TRỊ</h1>

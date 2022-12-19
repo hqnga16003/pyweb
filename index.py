@@ -15,91 +15,8 @@ import keys
 @app.route("/")
 def index():
 
-    session.clear()
+    # session.clear()
     return render_template('index.html')
-
-
-# @app.route('/add',methods = ['POST'])
-# def add_m():
-#     quantity = int(request.form.get('quantity'))
-#     code = request.form.get('code')
-
-
-
-
-
-@app.route('/danhsachbenhnhan')
-def danhsachbenhnhan():
-    p = dao.load_patient_in_patient_medicaList()
-
-    return render_template('/danhsachbenhnhan.html', p=p)
-
-
-@app.route('/taodanhsachkham', methods=['get', 'post'])
-def tdsk():
-    if request.method.__eq__('POST'):
-        dao.create_medicalist(name=request.form.get('medicalexaminationday'))
-    return render_template('taodanhsachkham.html')
-
-
-@app.route("/xemdanhsachkham", methods=['get', 'post'])
-def xemdanhsachkham():
-    medicalists = dao.load_medicalist()
-    medi_id = request.args.get('medicalist_id')
-    patients = dao.load_patient(medi_id)
-
-    return render_template('xemdanhsachkham.html', medicalists=medicalists, patients=patients)
-
-
-
-@app.route('/danhsachthuoc', methods=['get', 'post'])
-def danhsachthuoc():
-    medicines = dao.load_medicines()
-    quantity = request.form.get('quantity')
-
-    id = request.form.get('code')
-    unit = request.form.get('unit')
-    name = request.form.get('name')
-
-    if request.method.__eq__('POST'):
-        medical_report = session.get('medical_report')
-        if not medical_report:
-            medical_report = {}
-
-        if id in medical_report:
-            quantity = medical_report[id]['quantity'] = quantity = medical_report[id]['quantity'] + 1
-        else:
-            medical_report[id] = {
-                'id': id,
-                'name': name,
-                'unit': unit,
-                'quantity': quantity
-            }
-        session['medical_report'] = medical_report
-
-
-    return render_template('danhsachthuoc.html', medicines=medicines)
-
-@app.route('/phieukham', methods=['get', 'post'])
-def phieukham():
-
-    medicines = dao.load_medicines()
-    patient_medicalist_id = request.args.get('patient_medicalist_id')
-    symptom = request.form.get('trieuchung')
-    diseaseprediction = request.form.get('dudoanbenh')
-    if request.method.__eq__('POST'):
-        if symptom and diseaseprediction:
-            dao.create_medical_report(symptom=symptom,
-                                      diseaseprediction=diseaseprediction,
-                                      patient_medicalist_id=patient_medicalist_id)
-
-    return render_template('phieukham.html', medicines=medicines)
-
-
-@app.route("/dsbs")
-def dsbs():
-    return render_template('dsbs.html')
-
 
 @app.route("/dklk", methods=['get', 'post'])
 def dklk():
@@ -182,53 +99,6 @@ def log_out():
 def load_user(user_id):
     return dao.get_user_by_id(user_id)
 
-
-@app.route('/api/add-medicine', methods=['post'])
-def add_medicine_to_medical_report():
-    data = request.json
-    id = str(data['id'])
-    medical_report = session['medical_report'] if 'medical_report' in session else {}
-
-    if id in medical_report:
-        medical_report[id]['quantity'] += 1
-    else:
-        name = data['name']
-        unit = data['unit']
-
-        medical_report[id] = {
-            "id": id,
-            "name": name,
-            "unit": unit,
-            "quantity": 1
-        }
-
-    session['medical_report'] = medical_report
-    return jsonify(dao.count(medical_report=medical_report))
-
-    # data = request.json
-    # id = str(data.get('id'))
-    # name = data.get('name')
-    # unit = data.get('unit')
-    # # use = data.get('use')
-    #
-    # medical_report = session.get('medical_report')
-    # if not medical_report:
-    #     medical_report = {}
-    #
-    # if id in medical_report:
-    #     quantity = medical_report[id]['quantity'] = quantity = medical_report[id]['quantity'] + 1
-    # else:
-    #     medical_report[id] = {
-    #         'id': id,
-    #         'name': name,
-    #         'unit': unit,
-    #         'quantity': 1
-    #         # 'use': use
-    #
-    #     }
-    #
-    # session['medical_report'] = medical_report
-    # return jsonify(dao.count(medical_report))
 
 
 if __name__ == "__main__":
