@@ -83,6 +83,7 @@ class Patient_MedicaList(BaseModel):  # benh nhan_ danh sach benh nhan
 class MedicalReport(BaseModel):  # phieu kham
     symptom = Column(String(50))
     diseaseprediction = Column(String(50))
+    created_date = Column(DateTime, default=datetime.now())
     patient_medicalist_id = Column(ForeignKey(Patient_MedicaList.id), unique=True)
     doctor_id = Column(Integer, ForeignKey(User.id), nullable=False)
     details = relationship('DetailMedicalReport', backref='medicalreport', lazy=True)
@@ -137,7 +138,7 @@ class RegulationsMedicalExpenses(BaseModel):  # quy dinh tien kham benh
 
 class Receipt(BaseModel):  # hoa don
 
-    datecreated = Column(DateTime)
+    created_date = Column(DateTime, default=datetime.now())
     medicinecash = Column(Integer)
     medicalcash = Column(Integer)
     medicalreport_id = Column(ForeignKey(MedicalReport.id), unique=True)
@@ -162,7 +163,7 @@ if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-        #db.create_all()
+        # db.create_all()
 
     # dskham = MedicaList(name="danh sach 2", nurse_id=1)
     # db.session.add(dskham)

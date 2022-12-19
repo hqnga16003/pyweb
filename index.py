@@ -2,6 +2,8 @@ from flask import render_template, request, redirect, url_for, jsonify
 from flask import session
 from pyweb import app, dao, admin, login
 from flask_login import login_user, logout_user
+
+from pyweb.dao import get_medicalist_by_date
 from pyweb.decorators import annonymous_user
 from pyweb.models import UserRole
 from twilio.rest import Client
@@ -14,25 +16,25 @@ import keys
 
 @app.route("/")
 def index():
-
-    # session.clear()
     return render_template('index.html')
 
 @app.route("/dklk", methods=['get', 'post'])
 def dklk():
     medicalists = dao.load_medicalist()
-    err_msg = ''
+    mes = ''
     if request.method.__eq__('POST'):
-        dao.add_patient_medicalist(
-            patient_id=dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
-                                       sex=request.form.get('sex'),
-                                       phonenumber=request.form.get('phonenumber'),
-                                       address=request.form.get('address'),
-                                       identitycard=request.form.get('identitycard')),
-            date=request.form.get('medicaday'))
-        return render_template('index.html')
-
-    return render_template('dklk.html', medicalists=medicalists)
+        medicalist_id = get_medicalist_by_date(request.form.get('medicaday'))
+        if medicalist_id:
+            dao.add_patient_medicalist(
+                patient_id=dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
+                                           sex=request.form.get('sex'),
+                                           phonenumber=request.form.get('phonenumber'),
+                                           address=request.form.get('address'),
+                                           identitycard=request.form.get('identitycard')),date = medicalist_id)
+            mes = 'Đăng ký thành công'
+        else:
+            mes = 'Lịch Khám chưa mở ,vui lòng liên hệ ********* để biết thêm chi tiết'
+    return render_template('dklk.html', medicalists=medicalists,mes = mes)
 
 
 @app.route('/register', methods=['get', 'post'])

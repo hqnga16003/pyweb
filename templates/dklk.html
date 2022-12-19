@@ -11,10 +11,11 @@
 
 
                     {% if current_user.is_authenticated %}
-
-
-
-
+                    {% if mes %}
+                    <div class="alert alert-danger">
+                        {{mes}}
+                    </div>
+                    {% endif %}
                     <form method="post" action="/dklk" class="px-md-2">
 
                         <div class="form-outline mb-4">

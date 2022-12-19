@@ -53,7 +53,6 @@ def add_user(username, password, **kwargs):
 # thêm benh nhan
 def add_patient(name, sex, dateofbirth, address, phonenumber, identitycard):
     patient = Patient.query.filter_by(identitycard=identitycard).first()
-
     if patient:
         return patient.id
     else:
@@ -72,15 +71,18 @@ def create_medicalist(name):  # tao danh sach kham
 
 # thêm bệnh nhân-bac si
 def add_patient_medicalist(date, patient_id):
-    pm = Patient_MedicaList(patient_id=patient_id, medicalist_id=get_medicalist_by_date(date))
-    db.session.add(pm)
-    db.session.commit()
+        pm = Patient_MedicaList(patient_id=patient_id, medicalist_id=date)
+        db.session.add(pm)
+        db.session.commit()
+
 
 
 # lấy ds kham theo ngay
 def get_medicalist_by_date(date):
     m = MedicaList.query.filter_by(name=date).first()
-    return m.id
+    if m:
+        return m.id
+    return None
 
 
 # lay benh nhan theo cccd
@@ -243,17 +245,37 @@ def stats_revenue(kw=None, from_date=None, to_date=None):
     return query.group_by(Medicine.id).order_by(-Medicine.id).all()
 
 
-def baocaodoanhthu(from_date=None, to_date=None):
-    query = db.session.query(MedicaList.name, func.count(MedicalReport.id),func.sum(Receipt.medicalcash+Receipt.medicinecash))\
-        .join(Patient_MedicaList,MedicaList.id==Patient_MedicaList.medicalist_id)\
-        .join(MedicalReport,MedicalReport.patient_medicalist_id==Patient_MedicaList.id)\
-        .join(Receipt,Receipt.medicalreport_id==MedicalReport.id)
+def baocaodoanhthu(input=None):
+    from_date = None
+    to_date = None
+    query = db.session.query(MedicaList.name, func.count(MedicalReport.id),
+                             func.sum(Receipt.medicalcash + Receipt.medicinecash)) \
+        .join(Patient_MedicaList, MedicaList.id == Patient_MedicaList.medicalist_id) \
+        .join(MedicalReport, MedicalReport.patient_medicalist_id == Patient_MedicaList.id) \
+        .join(Receipt, Receipt.medicalreport_id == MedicalReport.id)
 
     return query.group_by(MedicaList.id).all()
+
+
+def thongke(from_date=None, to_date=None):
+    query = db.session.query(Medicine.id,Medicine.name,Unit.name,func.sum(DetailMedicalReport.quantity))\
+        .join(Unit,Unit.id==Medicine.unit_id)\
+        .join(DetailMedicalReport,DetailMedicalReport.medicine_id==Medicine.id)\
+        .join(MedicalReport,MedicalReport.id==DetailMedicalReport.medicalreport_id)
+
+
+    if from_date:
+        query = query.filter(MedicalReport.created_date.__ge__(from_date))
+
+    if to_date:
+        query = query.filter(MedicalReport.created_date.__le__(to_date))
+
+    return   query.group_by(Medicine.id).all()
+
 
 
 if __name__ == '__main__':
     from pyweb import app
 
     with app.app_context():
-        print(baocaodoanhthu())
+        print(thongke())

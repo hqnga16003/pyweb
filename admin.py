@@ -63,23 +63,17 @@ class TaoDanhSachKham(AuthenticatedBaseView):
                 dao.create_medicalist(name=request.form.get('medicalexaminationday'))
             else:
                 mes = 'Ngày khám đã tạo '
-
-        # try:
-        #     dao.create_medicalist(name=request.form.get('medicalexaminationday'))
-        # except:
-        #     mes = 'Ngày khám đã tạo '
-        # else:
-        #     pass
         return self.render('admin/taodanhsachkham.html', mes=mes)
 
 
 class XemDanhSachKham(AuthenticatedBaseView):
     @expose('/', methods=['get', 'post'])
     def index(self):
+        i = 0
         medicalists = dao.load_medicalist()
         medi_id = request.args.get('medicalist_id')
         patients = dao.load_patient(medi_id)
-        return self.render('admin/xemdanhsachkham.html', medicalists=medicalists, patients=patients)
+        return self.render('admin/xemdanhsachkham.html', medicalists=medicalists, patients=patients,i=i)
 
 
 class DanhSachThuoc(AuthenticatedBaseView):
@@ -124,35 +118,39 @@ class DanhSachBenhNhan(AuthenticatedBaseView):
 class PhieuKham(AuthenticatedBaseView):
     @expose('/', methods=['get', 'post'])
     def __index__(self):
+        mes=''
         medical_report = session.get('medical_report')
         use = request.form.get('use')
         patient_medicalist_id = request.args.get('patient_medicalist_id')
         patient_id = request.args.get('patient_id')
-        if request.method.__eq__('POST'):
-            symptom = request.form.get('trieuchung')
-            diseaseprediction = request.form.get('dudoanbenh')
+        if patient_medicalist_id:
+            if request.method.__eq__('POST'):
+                symptom = request.form.get('trieuchung')
+                diseaseprediction = request.form.get('dudoanbenh')
 
-            if patient_medicalist_id:
-                dao.create_medical_report(symptom=symptom,
-                                          diseaseprediction=diseaseprediction,
-                                          patient_medicalist_id=patient_medicalist_id)
-                dao.tao_lich_su_benh_nhan(medicalreport_id=dao.lay_id_phieukham_by_id_benhnhan_dskham(
-                    patient_medicalist_id), patient_id=patient_id)
+                if patient_medicalist_id:
+                    dao.create_medical_report(symptom=symptom,
+                                              diseaseprediction=diseaseprediction,
+                                              patient_medicalist_id=patient_medicalist_id)
+                    dao.tao_lich_su_benh_nhan(medicalreport_id=dao.lay_id_phieukham_by_id_benhnhan_dskham(
+                        patient_medicalist_id), patient_id=patient_id)
 
-                if medical_report:
-                    medicalreport_id = dao.lay_id_phieukham_by_id_benhnhan_dskham(patient_medicalist_id)
-                    dao.save_DetailMedicalReport(medical_report=medical_report,
-                                                 medicalreport_id=medicalreport_id, patient_id=patient_id)
-                    medicinecash = dao.tinh_tien(medicalreport_id)
+                    if medical_report:
+                        medicalreport_id = dao.lay_id_phieukham_by_id_benhnhan_dskham(patient_medicalist_id)
+                        dao.save_DetailMedicalReport(medical_report=medical_report,
+                                                     medicalreport_id=medicalreport_id, patient_id=patient_id)
+                        medicinecash = dao.tinh_tien(medicalreport_id)
 
-                    dao.tao_hoa_don(medicalreport_id=medicalreport_id,patient_id=patient_id
-                                    ,medicinecash=medicinecash[0])
-                    del session['medical_report']
-                else:
-                    medicalreport_id = dao.lay_id_phieukham_by_id_benhnhan_dskham(patient_medicalist_id)
-                    dao.tao_hoa_don(medicalreport_id=medicalreport_id,patient_id=patient_id)
+                        dao.tao_hoa_don(medicalreport_id=medicalreport_id, patient_id=patient_id
+                                        , medicinecash=medicinecash[0])
+                        del session['medical_report']
+                    else:
+                        medicalreport_id = dao.lay_id_phieukham_by_id_benhnhan_dskham(patient_medicalist_id)
+                        dao.tao_hoa_don(medicalreport_id=medicalreport_id, patient_id=patient_id)
+        else:
+            mes = 'Chưa chọn bệnh nhân'
 
-        return self.render('admin/phieukham.html')
+        return self.render('admin/phieukham.html',mes = mes)
 
 class HoSoBenhNhan(AuthenticatedBaseView):
     @expose('/', methods=['get', 'post'])
@@ -179,9 +177,22 @@ class DanhSachHoaDon(AuthenticatedBaseView):
 class MyAdminView(AdminIndexView):
     @expose('/')
     def index(self):
+        medical_report = session.get('medical_report')
+        if medical_report:
+            del session['medical_report']
         stats = dao.baocaodoanhthu()
 
         return self.render('admin/index.html',stats=stats)
+
+
+class ThongKe(AuthenticatedBaseView):
+    @expose('/')
+    def index(self):
+        stats = dao.thongke(from_date=request.args.get('from_date'),
+                                  to_date=request.args.get('to_date'))
+
+        return self.render('admin/thongke.html',stats = stats)
+
 
 
 admin = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4',index_view=MyAdminView())
@@ -197,8 +208,8 @@ admin.add_view(XemDanhSachKham(name="Xem danh sách khám"))
 admin.add_view(DanhSachThuoc(name="Danh sach thuoc"))
 admin.add_view(DanhSachBenhNhan(name="Danh sach benh nhan"))
 admin.add_view(PhieuKham(name="Phiếu khám"))
-# admin.add_view(HoaDon(name="Hóa đơn"))
 admin.add_view(HoSoBenhNhan(name="Hồ sơ"))
 admin.add_view(DanhSachHoaDon(name='danh sách hóa đơn'))
+admin.add_view(ThongKe(name='Thông kê sử dụng thuốc'))
 
 admin.add_view(LogoutView(name='Đăng xuất'))

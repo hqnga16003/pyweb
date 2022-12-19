@@ -2,8 +2,13 @@
 
 {% block body %}
 
+{% if mes %}
+<div class="alert alert-danger">
+    {{mes}}
+</div>
+{% endif %}
 
-<form method="post" action="" >
+<form method="post" action="">
 
 
     <div class="form-floating mb-3 mt-3">
@@ -38,8 +43,8 @@
             <td>{{c.name}}</td>
             <td>{{c.unit}}</td>
             <td>{{c.quantity}}</td>
-             <td>{{c.price}}</td>
-            <td><input type="text" name = use></td>
+            <td>{{c.price}}</td>
+            <td><input type="text" name=use></td>
         </tr>
         {%endfor%}
         {% else%}
@@ -52,14 +57,6 @@
     </div>
 
 </form>
-
-
-
-
-
-
-
-
 
 
 {% endblock %}
