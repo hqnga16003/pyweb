@@ -199,20 +199,15 @@ class ThongKe(AuthenticatedBaseView):
 
 admin = Admin(app=app, name='QUẢN TRỊ VIÊN', template_mode='bootstrap4',index_view=MyAdminView())
 
-
 admin.add_view(AuthenticatedModelView(Category, db.session, name=" Danh Sach Loai thuoc"))
 admin.add_view(AuthenticatedModelView(Unit, db.session, name="Đơn vị thuốc"))
-
 admin.add_view(MedicineView(Medicine, db.session, name="Danh Sach Thuoc"))
-
 admin.add_view(TaoDanhSachKham(name="Tạo danh sách khám"))
 admin.add_view(XemDanhSachKham(name="Xem danh sách khám"))
-admin.add_view(DanhSachThuoc(name="Danh sach thuoc"))
-admin.add_view(DanhSachBenhNhan(name="Danh sach benh nhan"))
+admin.add_view(DanhSachThuoc(name="Danh sách thuốc"))
+admin.add_view(DanhSachBenhNhan(name="Danh sách bệnh nhân"))
 admin.add_view(PhieuKham(name="Phiếu khám"))
 admin.add_view(HoSoBenhNhan(name="Hồ sơ"))
-admin.add_view(DanhSachHoaDon(name='danh sách hóa đơn'))
-admin.add_view(ThongKe(name='Thông kê sử dụng thuốc'))
-
-
+admin.add_view(DanhSachHoaDon(name='Danh sách hóa đơn'))
+admin.add_view(ThongKe(name='Thống kê sử dụng thuốc'))
 admin.add_view(LogoutView(name='Đăng xuất'))
