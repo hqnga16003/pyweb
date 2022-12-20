@@ -1,6 +1,6 @@
     body {
       font-family: "Open Sans", sans-serif;
-      color: #444444;
+      color: #fff;
     }
 
     a {
@@ -22,3 +22,49 @@
      h7{
       font-family: "Raleway", sans-serif;
     }
+    .mb_15 {
+  margin-bottom: 15px;
+}
+.row {
+  margin-right: -10px;
+  margin-left: -10px;
+}
+.thumb_cgia {
+  box-shadow: 0 1px 3px #ccc;
+  overflow: hidden;
+  display: block;
+  border: 1px solid #ccc;
+}
+a, a:hover, a:active, a:focus {
+  text-decoration: none;
+  outline: none;
+}
+.carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.col-xs-6 {
+  width: 50%;
+}
+.col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+  float: left;
+}
+.info_chuyengia {
+  position: relative;
+}
+.font_helI {
+  font-family: "HelveticaNeue-LightItalic";
+}
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.clear {
+  display: block;
+  clear: both;
+  width: 100%;
+  height: 1px;
+}
+
