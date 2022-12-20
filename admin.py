@@ -180,7 +180,9 @@ class MyAdminView(AdminIndexView):
         medical_report = session.get('medical_report')
         if medical_report:
             del session['medical_report']
-        stats = dao.baocaodoanhthu()
+        from_date = request.args.get('from_date')
+        to_date = request.args.get('to_date')
+        stats = dao.baocaodoanhthu(from_date=from_date,to_date=to_date)
 
         return self.render('admin/index.html',stats=stats)
 
@@ -211,5 +213,6 @@ admin.add_view(PhieuKham(name="Phiếu khám"))
 admin.add_view(HoSoBenhNhan(name="Hồ sơ"))
 admin.add_view(DanhSachHoaDon(name='danh sách hóa đơn'))
 admin.add_view(ThongKe(name='Thông kê sử dụng thuốc'))
+
 
 admin.add_view(LogoutView(name='Đăng xuất'))
