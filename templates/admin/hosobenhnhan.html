@@ -5,13 +5,13 @@
 
 <table class="table">
       <tr>
-        <th>ID phiếu khám</th>
+        <th>Thời gian</th>
         <th>Triệu chứng</th>
         <th>Dự đoán bệnh</th>
     </tr>
     {% for c in lichsu %}
     <tr>
-        <td>{{c.id}}</td>
+        <td>{{c.created_date}}</td>
         <td>{{c.symptom}}</td>
         <td>{{c.diseaseprediction}}</td>
 

@@ -6,7 +6,7 @@ const ctx = document.getElementById('soLuong');
     data: {
       labels: labels,
       datasets: [{
-        label: 'Số lượng',
+        label: 'Doanh Thu',
         data: data,
         borderWidth: 1
       }]

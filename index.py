@@ -25,13 +25,19 @@ def dklk():
     if request.method.__eq__('POST'):
         medicalist_id = get_medicalist_by_date(request.form.get('medicaday'))
         if medicalist_id:
-            dao.add_patient_medicalist(
-                patient_id=dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
-                                           sex=request.form.get('sex'),
-                                           phonenumber=request.form.get('phonenumber'),
-                                           address=request.form.get('address'),
-                                           identitycard=request.form.get('identitycard')),date = medicalist_id)
-            mes = 'Đăng ký thành công'
+            patient_id = dao.get_patient_by_identityycard(identitycard=request.form.get('identitycard'))
+            if not patient_id:
+                dao.add_patient_medicalist(
+                    patient_id=dao.add_patient(name=request.form.get('name'), dateofbirth=request.form.get('dateofbirth'),
+                                               sex=request.form.get('sex'),
+                                               phonenumber=request.form.get('phonenumber'),
+                                               address=request.form.get('address'),
+                                               identitycard=request.form.get('identitycard')),date = medicalist_id)
+                mes = 'Đăng ký thành công'
+            else:
+                if dao.check(medicalist_id = medicalist_id,patient_id=patient_id):
+                    mes = 'Bạn đã đăng ký rồi'
+
         else:
             mes = 'Lịch Khám chưa mở ,vui lòng liên hệ ********* để biết thêm chi tiết'
     return render_template('dklk.html', medicalists=medicalists,mes = mes)

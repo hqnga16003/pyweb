@@ -88,7 +88,6 @@ class MedicalReport(BaseModel):  # phieu kham
     doctor_id = Column(Integer, ForeignKey(User.id), nullable=False)
     details = relationship('DetailMedicalReport', backref='medicalreport', lazy=True)
     receipt = relationship('Receipt', backref='receipt', uselist=False)
-
     patienthistorys = relationship('PatientHistory', backref='medicalreport', uselist=False)
 
 
@@ -142,13 +141,9 @@ class Receipt(BaseModel):  # hoa don
     medicinecash = Column(Integer)
     medicalcash = Column(Integer)
     medicalreport_id = Column(ForeignKey(MedicalReport.id), unique=True)
-    # detailmedicalreports = relationship('DetailMedicalReport', backref='receipt', lazy=True)
     cashier_id = Column(Integer, ForeignKey(User.id), nullable=False)
     patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False)
     regulationsmedicalexpenses_id = Column(Integer, ForeignKey(RegulationsMedicalExpenses.id))
-
-
-
 
 class DetailMedicalReport(BaseModel):  # chi tiet phieu kham
     quantity = Column(Integer)
@@ -156,14 +151,13 @@ class DetailMedicalReport(BaseModel):  # chi tiet phieu kham
     medicalreport_id = Column(Integer, ForeignKey(MedicalReport.id), nullable=False)
     medicine_id = Column(Integer, ForeignKey(Medicine.id), nullable=False)
     use = Column(String(100))
-    # receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
 
 
 if __name__ == '__main__':
     with app.app_context():
         import hashlib
 
-        # db.create_all()
+        #db.create_all()
 
     # dskham = MedicaList(name="danh sach 2", nurse_id=1)
     # db.session.add(dskham)

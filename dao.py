@@ -87,8 +87,11 @@ def get_medicalist_by_date(date):
 
 # lay benh nhan theo cccd
 def get_patient_by_identityycard(identitycard):
-    p = Patient.query.filter_by(identitycard='identitycard').first()
-    return p
+    p = Patient.query.filter_by(identitycard=identitycard).first()
+    if p:
+        return p.id
+    else:
+        return None
 
 
 def get_date_now():  # lay id ngay hien tai
@@ -134,8 +137,7 @@ def load_patient_in_patient_medicaList():
                                                                                    Patient.id == Patient_MedicaList.patient_id) \
         .filter(Patient_MedicaList.medicalist_id == date_id).all()
 
-    # query = db.session.query(Patient_MedicaList.id,Patient.id,Patient.name).join(Patient.id==Patient_MedicaList.patient_id)\
-    #     .filter(Patient_MedicaList.medicalist_id == date_id).all()
+
 
     return query
 
@@ -245,14 +247,18 @@ def stats_revenue(kw=None, from_date=None, to_date=None):
     return query.group_by(Medicine.id).order_by(-Medicine.id).all()
 
 
-def baocaodoanhthu(input=None):
-    from_date = None
-    to_date = None
+def baocaodoanhthu(from_date=None, to_date=None):
     query = db.session.query(MedicaList.name, func.count(MedicalReport.id),
                              func.sum(Receipt.medicalcash + Receipt.medicinecash)) \
         .join(Patient_MedicaList, MedicaList.id == Patient_MedicaList.medicalist_id) \
         .join(MedicalReport, MedicalReport.patient_medicalist_id == Patient_MedicaList.id) \
         .join(Receipt, Receipt.medicalreport_id == MedicalReport.id)
+
+    if from_date:
+        query = query.filter(Receipt.created_date.__ge__(from_date))
+
+    if to_date:
+        query = query.filter(Receipt.created_date.__le__(to_date))
 
     return query.group_by(MedicaList.id).all()
 
@@ -272,10 +278,14 @@ def thongke(from_date=None, to_date=None):
 
     return   query.group_by(Medicine.id).all()
 
+def check(patient_id,medicalist_id):
+    query = Patient_MedicaList.query.filter(Patient_MedicaList.patient_id==patient_id and Patient_MedicaList.medicalist_id==medicalist_id).first()
+    return query
+
 
 
 if __name__ == '__main__':
     from pyweb import app
 
     with app.app_context():
-        print(thongke())
+        print(get_patient_by_identityycard(1))
