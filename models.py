@@ -120,7 +120,6 @@ class Medicine(BaseModel):
     active = Column(Boolean, default=True)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
     unit_id = Column(Integer, ForeignKey(Unit.id), nullable=False)
-
     detail_medical_report = relationship('DetailMedicalReport', backref='medicine', lazy=True)
 
     def __str__(self):
