@@ -65,7 +65,6 @@ class TaoDanhSachKham(AuthenticatedBaseView):
                 mes = 'Ngày khám đã tạo '
         return self.render('admin/taodanhsachkham.html', mes=mes)
 
-
 class XemDanhSachKham(AuthenticatedBaseView):
     @expose('/', methods=['get', 'post'])
     def index(self):
@@ -74,7 +73,6 @@ class XemDanhSachKham(AuthenticatedBaseView):
         medi_id = request.args.get('medicalist_id')
         patients = dao.load_patient(medi_id)
         return self.render('admin/xemdanhsachkham.html', medicalists=medicalists, patients=patients,i=i)
-
 
 class DanhSachThuoc(AuthenticatedBaseView):
     @expose('/', methods=['get', 'post'])
